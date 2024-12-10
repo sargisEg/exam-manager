@@ -1,6 +1,6 @@
-package com.exammanager.user.repository;
+package com.exammanager.core.repository;
 
-import com.exammanager.user.model.entity.Exam;
+import com.exammanager.core.model.entity.Exam;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExamRepository extends JpaRepository<Exam, String> {

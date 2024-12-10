@@ -1,4 +1,4 @@
-package com.exammanager.user.model.entity;
+package com.exammanager.core.model.entity;
 
 import com.exammanager.common.model.entity.BaseEntity;
 import jakarta.persistence.*;

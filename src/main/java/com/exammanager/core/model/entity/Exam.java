@@ -1,7 +1,7 @@
-package com.exammanager.user.model.entity;
+package com.exammanager.core.model.entity;
 
 import com.exammanager.common.model.entity.BaseEntity;
-import com.exammanager.user.model.enums.ExamStatus;
+import com.exammanager.core.model.enums.ExamStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

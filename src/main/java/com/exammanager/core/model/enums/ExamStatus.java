@@ -1,4 +1,4 @@
-package com.exammanager.user.model.enums;
+package com.exammanager.core.model.enums;
 
 public enum ExamStatus {
     UPCOMING,

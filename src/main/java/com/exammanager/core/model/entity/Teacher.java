@@ -1,5 +1,6 @@
-package com.exammanager.user.model.entity;
+package com.exammanager.core.model.entity;
 
+import com.exammanager.user.model.entity.User;
 import com.exammanager.user.model.enums.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

@@ -1,0 +1,32 @@
+package com.exammanager.user.model.entity;
+
+import com.exammanager.common.model.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "DEPARTMENTS")
+public class Department extends BaseEntity {
+
+    @Column(name = "department_name", nullable = false)
+    private String departmentName;
+
+    @Column(name = "department_name_short", nullable = false)
+    private String departmentNameShort;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "head_of_department", nullable = false, foreignKey = @ForeignKey(name = "DEPARTMENTS_HEAD_OF_DEPARTMENT_TEACHERS_ID"))
+    private Teacher headOfDepartment;
+
+    public Department(String id, Long createdAt, Long updated, String departmentName, String departmentNameShort, Teacher headOfDepartment) {
+        super(id, createdAt, updated);
+        this.departmentName = departmentName;
+        this.departmentNameShort = departmentNameShort;
+        this.headOfDepartment = headOfDepartment;
+    }
+}

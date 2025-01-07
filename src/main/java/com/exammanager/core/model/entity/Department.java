@@ -13,20 +13,20 @@ import lombok.*;
 @Table(name = "DEPARTMENTS")
 public class Department extends BaseEntity {
 
-    @Column(name = "department_name", nullable = false)
-    private String departmentName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "department_name_short", nullable = false)
-    private String departmentNameShort;
+    @Column(name = "name_short", nullable = false)
+    private String nameShort;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "head_of_department", nullable = false, foreignKey = @ForeignKey(name = "DEPARTMENTS_HEAD_OF_DEPARTMENT_TEACHERS_ID"))
     private Teacher headOfDepartment;
 
-    public Department(String id, Long createdAt, Long updated, String departmentName, String departmentNameShort, Teacher headOfDepartment) {
+    public Department(String id, Long createdAt, Long updated, String name, String nameShort, Teacher headOfDepartment) {
         super(id, createdAt, updated);
-        this.departmentName = departmentName;
-        this.departmentNameShort = departmentNameShort;
+        this.name = name;
+        this.nameShort = nameShort;
         this.headOfDepartment = headOfDepartment;
     }
 }

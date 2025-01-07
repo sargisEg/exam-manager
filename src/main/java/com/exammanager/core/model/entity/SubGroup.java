@@ -13,6 +13,9 @@ import lombok.*;
 @Table(name = "SUBGROUPS")
 public class SubGroup extends BaseEntity {
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBGROUPS_GROUP_ID_GROUPS_ID"))
     private Group group;

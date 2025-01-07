@@ -13,6 +13,9 @@ import lombok.*;
 @Table(name = "GROUPS")
 public class Group extends BaseEntity {
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "start_year", nullable = false)
     private Integer startYear;
 

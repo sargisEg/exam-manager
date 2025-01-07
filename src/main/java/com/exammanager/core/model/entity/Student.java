@@ -15,12 +15,12 @@ import lombok.*;
 public class Student extends User {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "FK_STUDENTS_GROUP_ID_GROUPS_ID"))
-    private Group group;
+    @JoinColumn(name = "subgroup_id", foreignKey = @ForeignKey(name = "FK_STUDENTS_SUBGROUP_ID_SUBGROUPS_ID"))
+    private SubGroup subGroup;
 
-    public Student(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Group group) {
+    public Student(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, SubGroup subGroup) {
         super(id, createdAt, updated, fullName, email, phone, password);
-        this.group = group;
+        this.subGroup = subGroup;
     }
 
 }

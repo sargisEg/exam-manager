@@ -21,6 +21,10 @@ public class Exam extends BaseEntity {
     @JoinColumn(name = "course_id", nullable = false, foreignKey = @ForeignKey(name = "FK_EXAMS_COURSE_ID_COURSES_ID"))
     private Course course;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subgroup_id", nullable = false, foreignKey = @ForeignKey(name = "FK_EXAMS_SUBGROUP_ID_SUBGROUPS_ID"))
+    private SubGroup subGroup;
+
     @Column(name = "location", nullable = false)
     private String location;
 
@@ -29,6 +33,9 @@ public class Exam extends BaseEntity {
 
     @Column(name = "end_date", nullable = false)
     private Long endDate;
+
+    @Column(name = "max_points", nullable = false)
+    private Long maxPoints;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

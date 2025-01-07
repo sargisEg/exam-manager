@@ -20,10 +20,10 @@ import java.util.Set;
 public class Teacher extends User {
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Group> groups;
+    private Set<SubGroup> subGroups;
 
-    public Teacher(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Set<Group> groups) {
+    public Teacher(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Set<SubGroup> subGroups) {
         super(id, createdAt, updated, fullName, email, phone, password);
-        this.groups = groups;
+        this.subGroups = subGroups;
     }
 }

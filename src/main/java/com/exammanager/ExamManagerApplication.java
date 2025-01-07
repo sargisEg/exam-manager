@@ -1,5 +1,13 @@
 package com.exammanager;
 
+import com.exammanager.core.model.entity.Department;
+import com.exammanager.core.model.entity.Group;
+import com.exammanager.core.model.entity.Student;
+import com.exammanager.core.model.entity.Teacher;
+import com.exammanager.core.repository.DepartmentRepository;
+import com.exammanager.core.repository.GroupRepository;
+import com.exammanager.core.repository.StudentRepository;
+import com.exammanager.core.repository.TeacherRepository;
 import com.exammanager.user.model.entity.*;
 import com.exammanager.user.model.enums.Role;
 import com.exammanager.user.repository.*;

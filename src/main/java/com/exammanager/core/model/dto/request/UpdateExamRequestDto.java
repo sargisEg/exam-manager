@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateExamRequestDto {
+public class UpdateExamRequestDto {
 
     @NotNull(message = "title should not be null")
     @NotBlank(message = "title should not be empty")

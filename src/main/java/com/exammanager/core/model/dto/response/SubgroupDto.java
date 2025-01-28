@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubGroupDto {
+public class SubgroupDto {
 
     private String id;
     private String name;

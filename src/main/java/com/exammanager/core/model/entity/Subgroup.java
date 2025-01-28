@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "SUBGROUPS")
-public class SubGroup extends BaseEntity {
+public class Subgroup extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -20,7 +20,7 @@ public class SubGroup extends BaseEntity {
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBGROUPS_GROUP_ID_GROUPS_ID"))
     private Group group;
 
-    public SubGroup(String id, Long createdAt, Long updated, Group group) {
+    public Subgroup(String id, Long createdAt, Long updated, Group group) {
         super(id, createdAt, updated);
         this.group = group;
     }

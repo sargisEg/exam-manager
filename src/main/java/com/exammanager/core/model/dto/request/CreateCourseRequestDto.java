@@ -14,8 +14,4 @@ public class CreateCourseRequestDto {
     @NotNull(message = "name should not be null")
     @NotBlank(message = "name should not be empty")
     private String name;
-
-    @NotNull(message = "group Id should not be null")
-    @NotBlank(message = "group Id should not be empty")
-    private String groupId;
 }

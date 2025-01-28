@@ -12,7 +12,7 @@ public class ExamDto {
     private String id;
     private String title;
     private CourseDto course;
-    private SubGroupDto subGroup;
+    private SubgroupDto subgroup;
     private String location;
     private Long startDate;
     private Long endDate;

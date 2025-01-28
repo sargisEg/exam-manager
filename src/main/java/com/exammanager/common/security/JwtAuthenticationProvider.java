@@ -3,6 +3,7 @@ package com.exammanager.common.security;
 import com.exammanager.auth.model.entity.UserSession;
 import com.exammanager.auth.service.core.UserSessionService;
 import com.exammanager.common.security.jwt.AccessTokenHelper;
+import com.exammanager.user.model.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -31,8 +33,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         if (userSession.isEmpty() || new Date(userSession.get().getExpAt()).before(new Date())) {
             return null;
         }
+        final String email = accessTokenHelper.getEmail();
+        final String id = accessTokenHelper.getId();
+        final List<Role> roles = accessTokenHelper.getRoles();
+        UserInfoProvider.setUserInfo(new UserInfo(id, email, roles));
 
-        return new JwtAuthenticationToken(accessTokenHelper.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.name())).toList(), accessTokenHelper.getToken());
+        return new JwtAuthenticationToken(roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.name())).toList(), accessTokenHelper.getToken());
     }
 
     @Override

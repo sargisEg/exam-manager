@@ -20,8 +20,4 @@ public class CreateGroupRequestDto {
 
     @NotNull(message = "end year should not be null")
     private Integer endYear;
-
-    @NotNull(message = "department Id should not be null")
-    @NotBlank(message = "department Id should not be empty")
-    private String departmentId;
 }

@@ -16,11 +16,11 @@ public class Student extends User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subgroup_id", foreignKey = @ForeignKey(name = "FK_STUDENTS_SUBGROUP_ID_SUBGROUPS_ID"))
-    private SubGroup subGroup;
+    private Subgroup subgroup;
 
-    public Student(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, SubGroup subGroup) {
+    public Student(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Subgroup subgroup) {
         super(id, createdAt, updated, fullName, email, phone, password);
-        this.subGroup = subGroup;
+        this.subgroup = subgroup;
     }
 
 }

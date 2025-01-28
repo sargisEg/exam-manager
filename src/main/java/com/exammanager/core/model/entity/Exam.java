@@ -23,7 +23,7 @@ public class Exam extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subgroup_id", nullable = false, foreignKey = @ForeignKey(name = "FK_EXAMS_SUBGROUP_ID_SUBGROUPS_ID"))
-    private SubGroup subGroup;
+    private Subgroup subgroup;
 
     @Column(name = "location", nullable = false)
     private String location;

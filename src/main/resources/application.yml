@@ -1,16 +1,16 @@
-server:
+\dserver:
   port: 8088
 
 spring:
   application:
     name: exam-manager
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/exam
     username: postgres
     password: rAyWMlPeVsAs4Du
   jpa:
     hibernate:
-      ddl-auto: create
+#      ddl-auto: create
     show-sql: true
 
 logging:

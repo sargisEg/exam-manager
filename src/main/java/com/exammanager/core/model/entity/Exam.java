@@ -2,6 +2,7 @@ package com.exammanager.core.model.entity;
 
 import com.exammanager.common.model.entity.BaseEntity;
 import com.exammanager.core.model.enums.ExamStatus;
+import com.exammanager.core.model.enums.ExamType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,4 +41,8 @@ public class Exam extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ExamStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private ExamType type;
 }

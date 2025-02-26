@@ -11,6 +11,7 @@ alter table if exists user_sessions drop constraint if exists FK_USER_SESSIONS_U
 alter table if exists users drop constraint if exists FK_STUDENTS_SUBGROUP_ID_SUBGROUPS_ID;
 alter table if exists users_subgroups drop constraint if exists FKprhtjk695c1laaxwir0uecq3r;
 alter table if exists users_subgroups drop constraint if exists FK50xyja72poo9igitee89t6s9p;
+
 drop table if exists courses cascade;
 drop table if exists departments cascade;
 drop table if exists exam_results cascade;
@@ -21,9 +22,11 @@ drop table if exists user_roles cascade;
 drop table if exists user_sessions cascade;
 drop table if exists users cascade;
 drop table if exists users_subgroups cascade;
+
 drop sequence if exists user_roles_id;
 create sequence user_roles_id start with 1 increment by 50;
-create table courses (created_at bigint not null, updated_at bigint not null, group_id varchar(255) not null, id varchar(255) not null, name varchar(255) not null, primary key (id));
+
+create table courses (created_at bigint not null, updated_at bigint not null, group_id varchar(255) not null, id varchar(255) not null, name varchar(255) not null, teacher_id varchar(255) not null, primary key (id));
 create table departments (created_at bigint not null, updated_at bigint not null, head_of_department varchar(255) not null unique, id varchar(255) not null, name varchar(255) not null, name_short varchar(255) not null, primary key (id));
 create table exam_results (point integer not null, created_at bigint not null, updated_at bigint not null, exam_id varchar(255), id varchar(255) not null, student_id varchar(255), primary key (id));
 create table exams (created_at bigint not null, end_date bigint not null, max_points bigint not null, start_date bigint not null, updated_at bigint not null, course_id varchar(255) not null, id varchar(255) not null, location varchar(255) not null, status varchar(255) not null check (status in ('UPCOMING','IN_PROGRESS','FINISHED','CANCELED')), subgroup_id varchar(255) not null, title varchar(255) not null, type varchar(255) not null check (type in ('MIDTERM','GENERAL','REPEAT')), primary key (id));
@@ -33,7 +36,9 @@ create table user_roles (id bigint not null, role varchar(255) not null check (r
 create table user_sessions (created_at bigint not null, exp_at bigint not null, updated_at bigint not null, id varchar(255) not null, user_id varchar(255) not null, primary key (id), unique (user_id, id));
 create table users (created_at bigint not null, updated_at bigint not null, user_type_discriminator varchar(31) not null, email varchar(255) not null unique, full_name varchar(255) not null, id varchar(255) not null, password varchar(255) not null, phone varchar(255) not null unique, subgroup_id varchar(255), primary key (id));
 create table users_subgroups (subgroups_id varchar(255) not null, teacher_id varchar(255) not null, primary key (subgroups_id, teacher_id));
+
 alter table if exists courses add constraint FK_COURSES_GROUP_ID_GROUPS_ID foreign key (group_id) references groups;
+alter table if exists courses add constraint FK_COURSES_TEACHER_ID_TEACHERS_ID foreign key (teacher_id) references users;
 alter table if exists departments add constraint DEPARTMENTS_HEAD_OF_DEPARTMENT_TEACHERS_ID foreign key (head_of_department) references users;
 alter table if exists exam_results add constraint FK_EXAM_RESULTS_EXAM_ID_EXAMS_ID foreign key (exam_id) references exams;
 alter table if exists exam_results add constraint FK_EXAM_RESULTS_STUDENT_ID_USERS_ID foreign key (student_id) references users;

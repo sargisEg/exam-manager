@@ -1,4 +1,4 @@
-\dserver:
+server:
   port: 8088
 
 spring:
@@ -15,5 +15,5 @@ spring:
 
 logging:
   level:
-#    org.springframework.security: TRACE
+#    org.springframework.web: TRACE
     org.exammanager: TRACE

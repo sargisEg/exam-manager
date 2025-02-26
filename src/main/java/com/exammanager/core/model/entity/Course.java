@@ -19,4 +19,8 @@ public class Course extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "FK_COURSES_GROUP_ID_GROUPS_ID"))
     private Group group;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", nullable = false, foreignKey = @ForeignKey(name = "FK_COURSES_TEACHER_ID_TEACHERS_ID"))
+    private Teacher teacher;
 }

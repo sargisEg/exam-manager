@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface DepartmentService {
 
-    Department create(CreateDepartmentParams map);
+    Department create(CreateDepartmentParams params);
 
     Optional<Department> findById(String departmentId);
 
-    Department deleteById(String departmentId);
+    void deleteById(String departmentId);
 
-    Page<Department> getAll(String keyword, int page, int size);
+    Page<Department> findAll(int page, int size);
 }

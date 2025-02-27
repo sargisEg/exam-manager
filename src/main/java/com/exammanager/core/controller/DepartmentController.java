@@ -7,9 +7,10 @@ import com.exammanager.core.model.dto.request.CreateDepartmentRequestDto;
 import com.exammanager.core.model.dto.response.DepartmentDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class DepartmentController {
     private final DepartmentFacade departmentFacade;
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     ResponseEntity<DepartmentDto> createDepartment(@Valid @RequestBody CreateDepartmentRequestDto dto) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(departmentFacade.createDepartment(userInfo, dto), HttpStatus.OK);
@@ -32,9 +34,10 @@ public class DepartmentController {
     }
 
     @GetMapping()
-    ResponseEntity<Page<DepartmentDto>> getAllDepartments(@RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("size") int size) {
+    @Secured("ROLE_ADMIN")
+    ResponseEntity<PagedModel<DepartmentDto>> getAllDepartments(@RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(departmentFacade.getAllDepartment(userInfo, keyword, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(departmentFacade.getAllDepartment(userInfo, page, size), HttpStatus.OK);
     }
 
     @DeleteMapping("{departmentId}")

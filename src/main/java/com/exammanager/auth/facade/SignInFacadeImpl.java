@@ -9,9 +9,6 @@ import com.exammanager.common.exception.UnauthorizedException;
 import com.exammanager.common.security.jwt.JwtService;
 import com.exammanager.common.security.jwt.RefreshTokenHelper;
 import com.exammanager.user.model.entity.User;
-import com.exammanager.user.model.entity.UserRoles;
-import com.exammanager.user.model.enums.Role;
-import com.exammanager.user.service.core.UserRolesService;
 import com.exammanager.user.service.core.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -31,7 +27,6 @@ public class SignInFacadeImpl implements SignInFacade {
 
     private final JwtService jwtService;
     private final UserService userService;
-    private final UserRolesService userRolesService;
     private final UserSessionService userSessionService;
     private final PasswordEncoder passwordEncoder;
 
@@ -49,7 +44,6 @@ public class SignInFacadeImpl implements SignInFacade {
             );
 
         final User user = optionalUser.get();
-        final List<Role> roles = userRolesService.findByUserId(user.getId()).stream().map(UserRoles::getRole).toList();
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new UnauthorizedException(
@@ -60,7 +54,7 @@ public class SignInFacadeImpl implements SignInFacade {
 
         final UserSession userSession = userSessionService.createUserSession(user);
 
-        final String token = jwtService.createToken(user, roles, userSession.getId());
+        final String token = jwtService.createToken(user, userSession.getId());
         final String refreshToken = jwtService.createRefreshToken(userSession.getId(), userSession.getUpdatedAt());
 
         log.debug("Successfully signed in user with email - {}", dto.getEmail());
@@ -95,14 +89,13 @@ public class SignInFacadeImpl implements SignInFacade {
         }
 
         final User user = userSession.getUser();
-        final List<Role> roles = userRolesService.findByUserId(user.getId()).stream().map(UserRoles::getRole).toList();
         final Optional<UserSession> optionalUpdatedUserSession = userSessionService.updateUserSession(userSession.getId());
         if (optionalUpdatedUserSession.isEmpty()) {
             //This should never happen
             throw new UnauthorizedException("Something went wrong while updating token", "Invalid refresh token");
         }
 
-        final String token = jwtService.createToken(user, roles, userSession.getId());
+        final String token = jwtService.createToken(user, userSession.getId());
         final String refreshToken = jwtService.createRefreshToken(userSession.getId(), optionalUpdatedUserSession.get().getUpdatedAt());
 
         log.debug("Successfully refreshed token for user - {}", dto.getEmail());

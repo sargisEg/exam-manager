@@ -1,6 +1,7 @@
 package com.exammanager.user.model.entity;
 
 import com.exammanager.common.model.entity.BaseEntity;
+import com.exammanager.user.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,10 @@ public abstract class User extends BaseEntity {
 
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Column(name = "password", nullable = false)
     @ToString.Exclude

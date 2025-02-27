@@ -18,8 +18,4 @@ public class CreateDepartmentRequestDto {
     @NotNull(message = "short name should not be null")
     @NotBlank(message = "short name should not be empty")
     private String nameShort;
-
-    @NotNull(message = "teacher Id not be null")
-    @NotBlank(message = "teacher Id not be empty")
-    private String headOfDepartmentTeacherId;
 }

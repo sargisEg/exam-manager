@@ -25,4 +25,13 @@ public class UserServiceImpl implements UserService {
         log.trace("Successfully found user with email - {}, user - {}", email, optionalUser);
         return optionalUser;
     }
+
+    @Override
+    public Optional<User> findById(String userId) {
+        Assert.hasText(userId, "userId should not be null or empty");
+        log.trace("Finding user with userId - {}", userId);
+        final Optional<User> optionalUser = userRepository.findById(userId);
+        log.trace("Successfully found user with userId - {}, user - {}", userId, optionalUser);
+        return optionalUser;
+    }
 }

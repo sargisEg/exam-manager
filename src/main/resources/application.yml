@@ -15,5 +15,5 @@ spring:
 
 logging:
   level:
-#    org.springframework.web: TRACE
-    org.exammanager: TRACE
+#    org.springframework.security: TRACE
+    com.exammanager: DEBUG

@@ -3,7 +3,9 @@ package com.exammanager.common.security.config;
 import com.exammanager.auth.service.core.UserSessionService;
 import com.exammanager.common.security.JwtAuthenticationProvider;
 import com.exammanager.common.security.filter.JwtAuthFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +19,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+@Slf4j
 @EnableWebSecurity
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -38,7 +41,12 @@ public class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandlingConfigurer -> {
+                    exceptionHandlingConfigurer.authenticationEntryPoint((request, response, authException) -> {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    });
+                })
+                .addFilterAfter(new JwtAuthFilter(authenticationManager()), ExceptionTranslationFilter.class)
                 .authenticationManager(authenticationManager())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req

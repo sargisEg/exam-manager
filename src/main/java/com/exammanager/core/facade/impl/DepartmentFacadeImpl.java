@@ -11,6 +11,7 @@ import com.exammanager.core.service.core.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -69,13 +70,14 @@ public class DepartmentFacadeImpl implements DepartmentFacade {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<DepartmentDto> getAllDepartment(UserInfo userInfo, String keyword, int page, int size) {
+    public PagedModel<DepartmentDto> getAllDepartment(UserInfo userInfo, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
         log.trace("Getting all departments for provided request, user - {}", userInfo.id());
 
-        final Page<Department> departments = departmentService.getAll(keyword, page, size);
-        final Page<DepartmentDto> responseDto = departments
+        final Page<Department> departments = departmentService.findAll(page, size);
+        final Page<DepartmentDto> p = departments
                 .map(departmentMapper::map);
+        PagedModel<DepartmentDto> responseDto = new PagedModel<>(p);
 
         log.trace("Successfully got all departments for provided request, departments - {}", responseDto);
         return responseDto;

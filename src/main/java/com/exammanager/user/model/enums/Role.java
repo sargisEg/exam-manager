@@ -3,7 +3,6 @@ package com.exammanager.user.model.enums;
 public enum Role {
     STUDENT,
     TEACHER,
-    DEPARTMENT_HEAD,
     ADMIN;
 
     public static class Of {

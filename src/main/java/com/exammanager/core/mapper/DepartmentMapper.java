@@ -10,4 +10,6 @@ public interface DepartmentMapper {
     CreateDepartmentParams map(CreateDepartmentRequestDto dto);
 
     DepartmentDto map(Department department);
+
+    Department map(CreateDepartmentParams params);
 }

@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,5 +28,13 @@ public class UserSession extends BaseEntity {
         super(id, createdAt, updated);
         this.user = user;
         this.expAt = expAt;
+    }
+
+    @Override
+    public String toString() {
+        return "UserSession{" +
+                "user=" + user.getId() +
+                ", expAt=" + expAt +
+                '}';
     }
 }

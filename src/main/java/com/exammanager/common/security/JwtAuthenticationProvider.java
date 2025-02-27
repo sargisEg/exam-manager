@@ -5,7 +5,9 @@ import com.exammanager.auth.service.core.UserSessionService;
 import com.exammanager.common.security.jwt.AccessTokenHelper;
 import com.exammanager.user.model.enums.Role;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
@@ -24,9 +27,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     //TODO [09/12/2024] [14:11] write proper exception handling for jwt
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        final AccessTokenHelper accessTokenHelper = new AccessTokenHelper((String) authentication.getCredentials());
+        final AccessTokenHelper accessTokenHelper;
+        try {
+            accessTokenHelper = new AccessTokenHelper((String) authentication.getCredentials());
+        } catch (Exception e) {
+            throw new BadCredentialsException("Unauthorized");
+        }
         if (!accessTokenHelper.isValid()) {
-            return null;
+            throw new BadCredentialsException("Unauthorized");
         }
 
         final Optional<UserSession> userSession = userSessionService.findById(accessTokenHelper.getSessionId());
@@ -35,10 +43,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
         final String email = accessTokenHelper.getEmail();
         final String id = accessTokenHelper.getId();
-        final List<Role> roles = accessTokenHelper.getRoles();
-        UserInfoProvider.setUserInfo(new UserInfo(id, email, roles));
+        final Role role = accessTokenHelper.getRole();
+        UserInfoProvider.setUserInfo(new UserInfo(id, email, role));
 
-        return new JwtAuthenticationToken(roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.name())).toList(), accessTokenHelper.getToken());
+        return new JwtAuthenticationToken(List.of(new SimpleGrantedAuthority("ROLE_" + role.name())), accessTokenHelper.getToken());
     }
 
     @Override

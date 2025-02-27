@@ -53,9 +53,8 @@ public class AccessTokenHelper {
         return claims.get("sessionId", String.class);
     }
 
-    public List<Role> getRoles() {
-        final Collection<String> rolesArray = (Collection<String>) claims.get("roles", Collection.class);
-        return rolesArray.stream().map(roleName -> Role.valueOf(roleName.split("_")[1])).toList();
+    public Role getRole() {
+        return Role.valueOf(claims.get("role", String.class));
     }
 
 }

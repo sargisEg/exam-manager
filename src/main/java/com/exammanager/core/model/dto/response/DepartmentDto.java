@@ -12,5 +12,4 @@ public class DepartmentDto {
     private String id;
     private String name;
     private String nameShort;
-    private String departmentHeadName;
 }

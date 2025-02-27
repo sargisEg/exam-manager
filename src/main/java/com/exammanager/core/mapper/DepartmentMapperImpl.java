@@ -10,11 +10,29 @@ import org.springframework.stereotype.Component;
 public class DepartmentMapperImpl implements DepartmentMapper {
     @Override
     public CreateDepartmentParams map(CreateDepartmentRequestDto dto) {
-        return null;
+        return new CreateDepartmentParams(
+                dto.getName(),
+                dto.getNameShort()
+        );
     }
 
     @Override
     public DepartmentDto map(Department department) {
-        return null;
+        return new DepartmentDto(
+                department.getId(),
+                department.getName(),
+                department.getNameShort()
+        );
+    }
+
+    @Override
+    public Department map(CreateDepartmentParams params) {
+        final Department department = new Department(
+                params.getName(),
+                params.getNameShort()
+        );
+        department.setCreatedAt(System.currentTimeMillis());
+        department.setUpdatedAt(System.currentTimeMillis());
+        return department;
     }
 }

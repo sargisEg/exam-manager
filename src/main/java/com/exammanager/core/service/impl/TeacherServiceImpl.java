@@ -1,6 +1,9 @@
 package com.exammanager.core.service.impl;
 
+import com.exammanager.common.service.UuidProvider;
+import com.exammanager.core.mapper.TeacherMapper;
 import com.exammanager.core.model.entity.Teacher;
+import com.exammanager.core.model.params.CreateTeacherParams;
 import com.exammanager.core.repository.TeacherRepository;
 import com.exammanager.core.service.core.TeacherService;
 import com.exammanager.user.model.enums.Role;
@@ -16,6 +19,20 @@ import org.springframework.stereotype.Component;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final TeacherMapper teacherMapper;
+    private final UuidProvider uuidProvider;
+
+    @Override
+    public Teacher create(CreateTeacherParams params) {
+        log.trace("Creating teacher with params - {}", params);
+
+        final Teacher teacherFromParams = teacherMapper.map(params);
+        teacherFromParams.setId(uuidProvider.getUuid());
+        final Teacher teacher = teacherRepository.save(teacherFromParams);
+
+        log.trace("Successfully created teacher with params - {}, resul - {}", params, teacher);
+        return teacher;
+    }
 
     @Override
     public Page<Teacher> findAll(int page, int size) {

@@ -11,8 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "DEPARTMENTS")
-public class
-Department extends BaseEntity {
+public class Department extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -20,8 +19,8 @@ Department extends BaseEntity {
     @Column(name = "name_short", nullable = false)
     private String nameShort;
 
-    public Department(String id, Long createdAt, Long updated, String name, String nameShort) {
-        super(id, createdAt, updated);
+    public Department(Long createdAt, Long updated, String name, String nameShort) {
+        super(createdAt, updated);
         this.name = name;
         this.nameShort = nameShort;
     }

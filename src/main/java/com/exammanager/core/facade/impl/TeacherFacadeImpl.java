@@ -2,6 +2,8 @@ package com.exammanager.core.facade.impl;
 
 import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.facade.core.TeacherFacade;
+import com.exammanager.core.mapper.TeacherMapper;
+import com.exammanager.core.model.dto.request.CreateTeacherRequestDto;
 import com.exammanager.core.model.entity.Teacher;
 import com.exammanager.core.service.core.TeacherService;
 import com.exammanager.user.mapper.UserMapper;
@@ -19,6 +21,7 @@ import org.springframework.util.Assert;
 public class TeacherFacadeImpl implements TeacherFacade {
 
     private final TeacherService teacherService;
+    private final TeacherMapper teacherMapper;
     private final UserMapper userMapper;
 
     @Override
@@ -32,6 +35,18 @@ public class TeacherFacadeImpl implements TeacherFacade {
         PagedModel<UserDto> responseDto = new PagedModel<>(p);
 
         log.trace("Successfully got all teacher for provided request, response - {}", responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public UserDto createTeacher(UserInfo userInfo, CreateTeacherRequestDto dto) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        Assert.notNull(dto, "dto should not be null");
+        log.debug("Creating teacher for provided request - {}, user - {}", dto, userInfo.id());
+
+        final UserDto responseDto = userMapper.map(teacherService.create(teacherMapper.map(dto)));
+
+        log.debug("Successfully created teacher for provided request, response - {}", responseDto);
         return responseDto;
     }
 }

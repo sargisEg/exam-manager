@@ -18,8 +18,8 @@ public class Student extends User {
     @JoinColumn(name = "subgroup_id", foreignKey = @ForeignKey(name = "FK_STUDENTS_SUBGROUP_ID_SUBGROUPS_ID"))
     private Subgroup subgroup;
 
-    public Student(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Subgroup subgroup) {
-        super(id, createdAt, updated, fullName, email, phone, password);
+    public Student(Long createdAt, Long updated, String fullName, String email, String phone, String password, Role role, Subgroup subgroup) {
+        super(createdAt, updated, fullName, email, phone, role, password);
         this.subgroup = subgroup;
     }
 

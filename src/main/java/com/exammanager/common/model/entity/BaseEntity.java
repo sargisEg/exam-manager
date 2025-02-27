@@ -21,5 +21,10 @@ public abstract class BaseEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Long updatedAt;
+
+    public BaseEntity(Long createdAt, Long updatedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }
 

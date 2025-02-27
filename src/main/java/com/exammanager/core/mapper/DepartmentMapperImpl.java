@@ -27,12 +27,11 @@ public class DepartmentMapperImpl implements DepartmentMapper {
 
     @Override
     public Department map(CreateDepartmentParams params) {
-        final Department department = new Department(
+        return new Department(
+                System.currentTimeMillis(),
+                System.currentTimeMillis(),
                 params.getName(),
                 params.getNameShort()
         );
-        department.setCreatedAt(System.currentTimeMillis());
-        department.setUpdatedAt(System.currentTimeMillis());
-        return department;
     }
 }

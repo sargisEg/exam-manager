@@ -33,11 +33,12 @@ public abstract class User extends BaseEntity {
     @ToString.Exclude
     private String password;
 
-    public User(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password) {
-        super(id, createdAt, updated);
+    public User(Long createdAt, Long updated, String fullName, String email, String phone, Role role, String password) {
+        super(createdAt, updated);
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
+        this.role = role;
         this.password = password;
     }
 }

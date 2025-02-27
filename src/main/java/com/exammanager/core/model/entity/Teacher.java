@@ -22,8 +22,8 @@ public class Teacher extends User {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Subgroup> subgroups;
 
-    public Teacher(String id, Long createdAt, Long updated, String fullName, String email, String phone, String password, Set<Subgroup> subgroups) {
-        super(id, createdAt, updated, fullName, email, phone, password);
+    public Teacher(Long createdAt, Long updated, String fullName, String email, String phone, String password, Role role, Set<Subgroup> subgroups) {
+        super(createdAt, updated, fullName, email, phone, role, password);
         this.subgroups = subgroups;
     }
 }

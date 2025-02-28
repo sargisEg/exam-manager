@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSubGroupRequestDto {
+public class CreateSubgroupRequestDto {
 
     @NotNull(message = "name should not be null")
     @NotBlank(message = "name should not be empty")

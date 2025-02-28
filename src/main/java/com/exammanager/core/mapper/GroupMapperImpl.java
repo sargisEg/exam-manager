@@ -1,7 +1,7 @@
 package com.exammanager.core.mapper;
 
 import com.exammanager.core.model.dto.request.CreateGroupRequestDto;
-import com.exammanager.core.model.dto.request.CreateSubGroupRequestDto;
+import com.exammanager.core.model.dto.request.CreateSubgroupRequestDto;
 import com.exammanager.core.model.dto.response.GroupDto;
 import com.exammanager.core.model.dto.response.SubgroupDto;
 import com.exammanager.core.model.entity.Department;
@@ -52,7 +52,7 @@ public class GroupMapperImpl implements GroupMapper {
     }
 
     @Override
-    public CreateSubgroupParams map(Group group, CreateSubGroupRequestDto dto) {
+    public CreateSubgroupParams map(Group group, CreateSubgroupRequestDto dto) {
         return new CreateSubgroupParams(
                 dto.getName(),
                 group

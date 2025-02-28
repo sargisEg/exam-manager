@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -35,16 +38,46 @@ public class SubgroupServiceImpl implements SubgroupService {
 
     @Override
     public Page<Subgroup> findByGroupId(String groupId, int page, int size) {
-        log.trace("Finding subgroups by department id - {}", groupId);
+        log.trace("Finding subgroups page by group id - {}", groupId);
 
         final Page<Subgroup> subgroups = subGroupRepository.findByGroupId(groupId, PageRequest.of(page, size));
 
-        log.trace("Successfully found subgroups by department id - {}, result - {}", groupId, subgroups);
+        log.trace("Successfully found subgroups page by group id - {}, result - {}", groupId, subgroups);
         return subgroups;
     }
 
     @Override
     public void deleteByIdAndGroupId(String subgroupId, String groupId) {
 
+    }
+
+    @Override
+    public Optional<Subgroup> findByIdAndGroupId(String subgroupId, String groupId) {
+        log.trace("Finding subgroup by id - {} and group id - {}", subgroupId, groupId);
+
+        Optional<Subgroup> subgroup = subGroupRepository.findByIdAndGroupId(subgroupId, groupId);
+
+        log.trace("Successfully found subgroup by id - {} and group id - {}, result - {}", subgroupId, groupId, subgroup);
+        return subgroup;
+    }
+
+    @Override
+    public Optional<Subgroup> findById(String subgroupId) {
+        log.trace("Finding subgroup by id - {}", subgroupId);
+
+        Optional<Subgroup> subgroup = subGroupRepository.findById(subgroupId);
+
+        log.trace("Successfully found subgroup by id - {}, result - {}", subgroupId, subgroup);
+        return subgroup;
+    }
+
+    @Override
+    public List<Subgroup> findByGroupId(String groupId) {
+        log.trace("Finding subgroups by group id - {}", groupId);
+
+        List<Subgroup> subgroups = subGroupRepository.findByGroupId(groupId);
+
+        log.trace("Successfully found subgroups by group id - {}, result - {}", groupId, subgroups);
+        return subgroups;
     }
 }

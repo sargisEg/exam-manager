@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, String> {
 
-
     Page<Group> findByDepartmentId(String departmentId, Pageable pageable);
 
     Optional<Group> findByIdAndDepartmentId(String groupId, String departmentId);

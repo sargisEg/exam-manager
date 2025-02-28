@@ -5,7 +5,7 @@ import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.facade.core.GroupFacade;
 import com.exammanager.core.mapper.GroupMapper;
 import com.exammanager.core.model.dto.request.CreateGroupRequestDto;
-import com.exammanager.core.model.dto.request.CreateSubGroupRequestDto;
+import com.exammanager.core.model.dto.request.CreateSubgroupRequestDto;
 import com.exammanager.core.model.dto.response.GroupDto;
 import com.exammanager.core.model.dto.response.SubgroupDto;
 import com.exammanager.core.model.entity.Department;
@@ -20,6 +20,8 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -83,7 +85,7 @@ public class GroupFacadeImpl implements GroupFacade {
 
     @Override
     @Transactional
-    public SubgroupDto createSubgroup(UserInfo userInfo, String departmentId, String groupId, CreateSubGroupRequestDto dto) {
+    public SubgroupDto createSubgroup(UserInfo userInfo, String departmentId, String groupId, CreateSubgroupRequestDto dto) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
         Assert.notNull(dto, "dto should not be null");
@@ -100,11 +102,11 @@ public class GroupFacadeImpl implements GroupFacade {
 
     @Override
     @Transactional(readOnly = true)
-    public PagedModel<SubgroupDto> getSubgroups(UserInfo userInfo, String departmentId, String groupId, int page, int size) {
+    public PagedModel<SubgroupDto> getSubgroupsPage(UserInfo userInfo, String departmentId, String groupId, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
         Assert.hasText(groupId, "groupId should not be null");
-        log.debug("Getting subgroups in group - {}, user - {}, department - {}", groupId, userInfo.id(), departmentId);
+        log.debug("Getting subgroups page in group - {}, user - {}, department - {}", groupId, userInfo.id(), departmentId);
 
         getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
@@ -113,7 +115,7 @@ public class GroupFacadeImpl implements GroupFacade {
                 .map(groupMapper::map);
         final PagedModel<SubgroupDto> responseDto = new PagedModel<>(p);
 
-        log.debug("Successfully got subgroups in group - {}, response - {}", groupId, responseDto);
+        log.debug("Successfully got subgroups page in group - {}, response - {}", groupId, responseDto);
         return responseDto;
     }
 
@@ -147,6 +149,43 @@ public class GroupFacadeImpl implements GroupFacade {
         groupService.deleteByIdAndDepartmentId(groupId, departmentId);
 
         log.debug("Successfully deleted group by id - {}", groupId);
+    }
+
+    @Override
+    public SubgroupDto getSubgroup(UserInfo userInfo, String departmentId, String groupId, String subgroupId) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        Assert.hasText(departmentId, "departmentId should not be null");
+        Assert.hasText(groupId, "groupId should not be null");
+        Assert.hasText(subgroupId, "subgroupId should not be null");
+        log.trace("Getting subgroup with id - {}, user - {}, department - {}, group - {}", subgroupId, userInfo.id(), departmentId, groupId);
+
+        getDepartmentById(departmentId);
+        getGroupById(groupId, departmentId);
+
+        final SubgroupDto responseDto = groupMapper.map(subgroupService.findByIdAndGroupId(subgroupId, groupId).orElseThrow(() -> new NotFoundException(
+                        "Not found group with id - " + groupId + "and department id - " + departmentId,
+                        "Not found group with id - " + groupId
+                )));
+
+        log.trace("Successfully got subgroup with id - {}, response - {}", subgroupId, responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public List<SubgroupDto> getSubgroups(UserInfo userInfo, String departmentId, String groupId) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        Assert.hasText(departmentId, "departmentId should not be null");
+        Assert.hasText(groupId, "groupId should not be null");
+        log.debug("Getting all subgroups in group - {}, user - {}, department - {}", groupId, userInfo.id(), departmentId);
+
+        getDepartmentById(departmentId);
+        getGroupById(groupId, departmentId);
+
+        final List<SubgroupDto> responseDto = subgroupService.findByGroupId(groupId)
+                .stream().map(groupMapper::map).toList();
+
+        log.debug("Successfully got all subgroups in group - {}, response - {}", groupId, responseDto);
+        return responseDto;
     }
 
     private Department getDepartmentById(String departmentId) {

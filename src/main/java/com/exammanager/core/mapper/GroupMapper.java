@@ -1,7 +1,7 @@
 package com.exammanager.core.mapper;
 
 import com.exammanager.core.model.dto.request.CreateGroupRequestDto;
-import com.exammanager.core.model.dto.request.CreateSubGroupRequestDto;
+import com.exammanager.core.model.dto.request.CreateSubgroupRequestDto;
 import com.exammanager.core.model.dto.response.GroupDto;
 import com.exammanager.core.model.dto.response.SubgroupDto;
 import com.exammanager.core.model.entity.Department;
@@ -18,7 +18,7 @@ public interface GroupMapper {
 
     Group map(CreateGroupParams params);
 
-    CreateSubgroupParams map(Group group, CreateSubGroupRequestDto dto);
+    CreateSubgroupParams map(Group group, CreateSubgroupRequestDto dto);
 
     SubgroupDto map(Subgroup subgroup);
 

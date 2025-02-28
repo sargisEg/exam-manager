@@ -16,6 +16,7 @@ import com.exammanager.core.service.core.SubgroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -65,15 +66,16 @@ public class GroupFacadeImpl implements GroupFacade {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<GroupDto> getAllGroups(UserInfo userInfo, String departmentId, String keyword, int page, int size) {
+    public PagedModel<GroupDto> getAllGroups(UserInfo userInfo, String departmentId, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
         log.trace("Getting groups in department - {}, user - {}", departmentId, userInfo.id());
 
         getDepartmentById(departmentId);
 
-        final Page<GroupDto> responseDto = groupService.findByDepartmentId(departmentId, keyword, page, size)
+        final Page<GroupDto> p = groupService.findByDepartmentId(departmentId, page, size)
                 .map(groupMapper::map);
+        final PagedModel<GroupDto> responseDto = new PagedModel<>(p);
 
         log.trace("Successfully got groups in department - {}, response - {}", departmentId, responseDto);
         return responseDto;
@@ -88,7 +90,7 @@ public class GroupFacadeImpl implements GroupFacade {
         log.debug("Crating subgroup for provided request - {}, user - {}, department - {}, group - {}", dto, userInfo.id(), departmentId, groupId);
 
         getDepartmentById(departmentId);
-        final Group group = getGroupById(departmentId, groupId);
+        final Group group = getGroupById(groupId, departmentId);
 
         final SubgroupDto responseDto = groupMapper.map(subgroupService.create(groupMapper.map(group, dto)));
 
@@ -98,17 +100,18 @@ public class GroupFacadeImpl implements GroupFacade {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<SubgroupDto> getSubgroups(UserInfo userInfo, String departmentId, String groupId, String keyword, int page, int size) {
+    public PagedModel<SubgroupDto> getSubgroups(UserInfo userInfo, String departmentId, String groupId, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
         Assert.hasText(groupId, "groupId should not be null");
         log.debug("Getting subgroups in group - {}, user - {}, department - {}", groupId, userInfo.id(), departmentId);
 
         getDepartmentById(departmentId);
-        getGroupById(departmentId, groupId);
+        getGroupById(groupId, departmentId);
 
-        final Page<SubgroupDto> responseDto = subgroupService.findByGroupId(groupId, keyword, page, size)
+        final Page<SubgroupDto> p = subgroupService.findByGroupId(groupId, page, size)
                 .map(groupMapper::map);
+        final PagedModel<SubgroupDto> responseDto = new PagedModel<>(p);
 
         log.debug("Successfully got subgroups in group - {}, response - {}", groupId, responseDto);
         return responseDto;
@@ -124,7 +127,7 @@ public class GroupFacadeImpl implements GroupFacade {
         log.debug("Deleting subgroup by id - {}, in group - {}, user - {}, department - {}", subgroupId, groupId, userInfo.id(), departmentId);
 
         getDepartmentById(departmentId);
-        getGroupById(departmentId, groupId);
+        getGroupById(groupId, departmentId);
 
         subgroupService.deleteByIdAndGroupId(subgroupId, groupId);
 

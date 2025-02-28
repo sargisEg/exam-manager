@@ -15,6 +15,8 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,14 +29,14 @@ public class TeacherFacadeImpl implements TeacherFacade {
     @Override
     public PagedModel<UserDto> getAllTeachers(UserInfo userInfo, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
-        log.trace("Getting all teacher for provided request, user - {}", userInfo.id());
+        log.trace("Getting teachers page for provided request, user - {}", userInfo.id());
 
-        final Page<Teacher> departments = teacherService.findAll(page, size);
-        final Page<UserDto> p = departments
+        final Page<Teacher> teachers = teacherService.findAll(page, size);
+        final Page<UserDto> p = teachers
                 .map(userMapper::map);
         PagedModel<UserDto> responseDto = new PagedModel<>(p);
 
-        log.trace("Successfully got all teacher for provided request, response - {}", responseDto);
+        log.trace("Successfully got teachers page for provided request, response - {}", responseDto);
         return responseDto;
     }
 
@@ -47,6 +49,19 @@ public class TeacherFacadeImpl implements TeacherFacade {
         final UserDto responseDto = userMapper.map(teacherService.create(teacherMapper.map(dto)));
 
         log.debug("Successfully created teacher for provided request, response - {}", responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public List<UserDto> getAllTeachers(UserInfo userInfo) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        log.trace("Getting all teacher for provided request, user - {}", userInfo.id());
+
+        final List<UserDto> responseDto = teacherService.findAll().stream()
+                .map(userMapper::map)
+                .toList();
+
+        log.trace("Successfully got all teachers for provided request, response - {}", responseDto);
         return responseDto;
     }
 }

@@ -42,7 +42,7 @@ public class DepartmentFacadeImpl implements DepartmentFacade {
     public DepartmentDto getDepartment(UserInfo userInfo, String departmentId) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
-        log.trace("Getting department for provided request with department id - {}, user - {}", departmentId, userInfo.id());
+        log.debug("Getting department for provided request with department id - {}, user - {}", departmentId, userInfo.id());
 
         final Department optionalDepartment = departmentService.findById(departmentId).orElseThrow(() ->
                 new NotFoundException(

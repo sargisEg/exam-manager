@@ -26,8 +26,9 @@ public class Group extends BaseEntity {
     @JoinColumn(name = "department_id", nullable = false, foreignKey = @ForeignKey(name = "FK_GROUPS_DEPARTMENT_ID_DEPARTMENTS_ID"))
     private Department department;
 
-    public Group(String id, Long createdAt, Long updated, Integer startYear, Integer endYear, Department department) {
-        super(id, createdAt, updated);
+    public Group(Long createdAt, Long updated, String name, Integer startYear, Integer endYear, Department department) {
+        super(createdAt, updated);
+        this.name = name;
         this.startYear = startYear;
         this.endYear = endYear;
         this.department = department;

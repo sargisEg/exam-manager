@@ -7,7 +7,7 @@ import com.exammanager.core.model.dto.request.CreateCourseRequestDto;
 import com.exammanager.core.model.dto.response.CourseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +38,12 @@ public class CourseController {
     }
 
     @GetMapping()
-    ResponseEntity<Page<CourseDto>> getAllCoursesInGroup(
+    ResponseEntity<PagedModel<CourseDto>> getAllCoursesInGroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
-            @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("size") int size) {
+            @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(courseFacade.getCourses(userInfo, departmentId, groupId, keyword, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(courseFacade.getCourses(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
     }
 
     @DeleteMapping("{courseId}")

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/teachers")
@@ -26,10 +28,17 @@ public class TeacherController {
         return new ResponseEntity<>(teacherFacade.createTeacher(userInfo, dto), HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping("/page")
     @Secured("ROLE_ADMIN")
-    ResponseEntity<PagedModel<UserDto>> getAllTeachers(@RequestParam("page") int page, @RequestParam("size") int size) {
+    ResponseEntity<PagedModel<UserDto>> getAllTeachersPage(@RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping()
+    @Secured("ROLE_ADMIN")
+    ResponseEntity<List<UserDto>> getAllTeachers() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo), HttpStatus.OK);
     }
 }

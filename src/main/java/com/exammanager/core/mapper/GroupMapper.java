@@ -16,7 +16,11 @@ public interface GroupMapper {
 
     GroupDto map(Group group);
 
+    Group map(CreateGroupParams params);
+
     CreateSubgroupParams map(Group group, CreateSubGroupRequestDto dto);
 
     SubgroupDto map(Subgroup subgroup);
+
+    Subgroup map(CreateSubgroupParams params);
 }

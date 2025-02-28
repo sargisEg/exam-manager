@@ -1,18 +1,12 @@
 package com.exammanager.core.facade.core;
 
 import com.exammanager.common.security.UserInfo;
-import com.exammanager.core.model.dto.request.CreateTeacherRequestDto;
+import com.exammanager.core.model.dto.request.CreateStudentRequestDto;
 import com.exammanager.user.model.dto.response.UserDto;
 import org.springframework.data.web.PagedModel;
 
-import java.util.List;
-
-public interface TeacherFacade {
-
+public interface StudentFacade {
+    UserDto createTeacher(UserInfo userInfo, CreateStudentRequestDto dto);
 
     PagedModel<UserDto> getAllTeachers(UserInfo userInfo, int page, int size);
-
-    UserDto createTeacher(UserInfo userInfo, CreateTeacherRequestDto dto);
-
-    List<UserDto> getAllTeachers(UserInfo userInfo);
 }

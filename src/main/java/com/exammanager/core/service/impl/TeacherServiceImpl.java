@@ -13,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -42,5 +45,20 @@ public class TeacherServiceImpl implements TeacherService {
 
         log.trace("Successfully got all teachers, result - {}", teachers);
         return teachers;
+    }
+
+    @Override
+    public Optional<Teacher> findById(String teacherId) {
+        log.trace("Finding teacher with id - {}", teacherId);
+
+        final Optional<Teacher> teachers = teacherRepository.findById(teacherId);
+
+        log.trace("Successfully found teacher with id - {}, result - {}", teacherId, teachers);
+        return teachers;
+    }
+
+    @Override
+    public List<Teacher> findAll() {
+        return teacherRepository.findAllByRoleNot(Role.ADMIN);
     }
 }

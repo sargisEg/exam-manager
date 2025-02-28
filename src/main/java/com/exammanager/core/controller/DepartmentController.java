@@ -28,6 +28,7 @@ public class DepartmentController {
     }
 
     @GetMapping("{departmentId}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<DepartmentDto> getDepartment(@PathVariable("departmentId") String departmentId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(departmentFacade.getDepartment(userInfo, departmentId), HttpStatus.OK);

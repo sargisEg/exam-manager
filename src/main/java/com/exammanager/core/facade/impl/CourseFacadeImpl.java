@@ -9,12 +9,15 @@ import com.exammanager.core.model.dto.response.CourseDto;
 import com.exammanager.core.model.entity.Course;
 import com.exammanager.core.model.entity.Department;
 import com.exammanager.core.model.entity.Group;
+import com.exammanager.core.model.entity.Teacher;
 import com.exammanager.core.service.core.CourseService;
 import com.exammanager.core.service.core.DepartmentService;
 import com.exammanager.core.service.core.GroupService;
+import com.exammanager.core.service.core.TeacherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -27,6 +30,7 @@ public class CourseFacadeImpl implements CourseFacade {
     private final CourseService courseService;
     private final DepartmentService departmentService;
     private final GroupService groupService;
+    private final TeacherService teacherService;
 
     private final CourseMapper courseMapper;
 
@@ -40,9 +44,10 @@ public class CourseFacadeImpl implements CourseFacade {
         log.debug("Crating course for provided request - {}, user - {}, group - {}", dto, userInfo.id(), groupId);
 
         getDepartmentById(departmentId);
-        final Group group = getGroupById(departmentId, groupId);
+        final Group group = getGroupById(groupId, departmentId);
+        final Teacher teacher = getTeacherById(dto.getTeacherId());
 
-        final CourseDto responseDto = courseMapper.map(courseService.create(courseMapper.map(group, dto)));
+        final CourseDto responseDto = courseMapper.map(courseService.create(courseMapper.map(group, teacher, dto)));
 
         log.debug("Successfully created course for provided request - {}, response - {}", dto, responseDto);
         return responseDto;
@@ -58,7 +63,7 @@ public class CourseFacadeImpl implements CourseFacade {
         log.debug("Getting course with id - {}, user - {}, group - {}", courseId, userInfo.id(), groupId);
 
         getDepartmentById(departmentId);
-        getGroupById(departmentId, groupId);
+        getGroupById(groupId, departmentId);
 
         final Course course = courseService.findByIdAndGroupId(courseId, groupId).orElseThrow(() ->
                 new NotFoundException(
@@ -74,7 +79,7 @@ public class CourseFacadeImpl implements CourseFacade {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CourseDto> getCourses(UserInfo userInfo, String departmentId, String groupId, String keyword, int page, int size) {
+    public PagedModel<CourseDto> getCourses(UserInfo userInfo, String departmentId, String groupId, int page, int size) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
         Assert.hasText(groupId, "groupId should not be null");
@@ -82,8 +87,9 @@ public class CourseFacadeImpl implements CourseFacade {
 
         getDepartmentById(departmentId);
 
-        final Page<CourseDto> responseDto = courseService.findByGroupId(groupId, keyword, page, size)
+        final Page<CourseDto> p = courseService.findByGroupId(groupId, page, size)
                 .map(courseMapper::map);
+        final PagedModel<CourseDto> responseDto = new PagedModel<>(p);
 
         log.trace("Successfully got courses in group - {}, response - {}", groupId, responseDto);
         return responseDto;
@@ -98,7 +104,7 @@ public class CourseFacadeImpl implements CourseFacade {
         log.debug("Deleting course by id - {}, in group - {}, user - {}", courseId, groupId, userInfo.id());
 
         getDepartmentById(departmentId);
-        getGroupById(departmentId, groupId);
+        getGroupById(groupId, departmentId);
 
         courseService.deleteByIdAndGroupId(courseId, groupId);
 
@@ -119,5 +125,14 @@ public class CourseFacadeImpl implements CourseFacade {
                         "Not found group with id - " + groupId + "and department id - " + departmentId,
                         "Not found group with id - " + groupId
                 ));
+    }
+
+    private Teacher getTeacherById(String teacherId) {
+        return teacherService.findById(teacherId).orElseThrow(() ->
+                new NotFoundException(
+                        "Not found teacher with id - " + teacherId,
+                        "Not found teacherId with id - " + teacherId
+                ));
+
     }
 }

@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 
 public interface SubgroupService {
 
-    Subgroup create(CreateSubgroupParams map);
+    Subgroup create(CreateSubgroupParams params);
 
-    Page<Subgroup> findByGroupId(String groupId, String keyword, int page, int size);
+    Page<Subgroup> findByGroupId(String groupId, int page, int size);
 
     void deleteByIdAndGroupId(String subgroupId, String groupId);
 }

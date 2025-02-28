@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface GroupService {
 
-    Group create(CreateGroupParams map);
+    Group create(CreateGroupParams params);
 
     Optional<Group> findByIdAndDepartmentId(String groupId, String departmentId);
 
-    Page<Group> findByDepartmentId(String departmentId, String keyword, int page, int size);
+    Page<Group> findByDepartmentId(String departmentId, int page, int size);
 
     void deleteByIdAndDepartmentId(String groupId, String departmentId);
 }

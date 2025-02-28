@@ -20,8 +20,9 @@ public class Subgroup extends BaseEntity {
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "FK_SUBGROUPS_GROUP_ID_GROUPS_ID"))
     private Group group;
 
-    public Subgroup(String id, Long createdAt, Long updated, Group group) {
-        super(id, createdAt, updated);
+    public Subgroup(Long createdAt, Long updated, String name, Group group) {
+        super(createdAt, updated);
+        this.name = name;
         this.group = group;
     }
 }

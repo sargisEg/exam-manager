@@ -9,7 +9,7 @@ import com.exammanager.core.model.dto.response.GroupDto;
 import com.exammanager.core.model.dto.response.SubgroupDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +34,11 @@ public class GroupController {
     }
 
     @GetMapping()
-    ResponseEntity<Page<GroupDto>> getAllGroupsInDepartment(
+    ResponseEntity<PagedModel<GroupDto>> getAllGroupsInDepartment(
             @PathVariable("departmentId") String departmentId,
-            @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("size") int size) {
+            @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(groupFacade.getAllGroups(userInfo, departmentId, keyword, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(groupFacade.getAllGroups(userInfo, departmentId, page, size), HttpStatus.OK);
     }
 
     @PostMapping("{groupId}/subgroups")
@@ -51,12 +51,12 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups")
-    ResponseEntity<Page<SubgroupDto>> getSubGroups(
+    ResponseEntity<PagedModel<SubgroupDto>> getSubGroups(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
-            @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("size") int size) {
+            @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(groupFacade.getSubgroups(userInfo, departmentId, groupId, keyword, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(groupFacade.getSubgroups(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/subgroups/{subgroupId}")

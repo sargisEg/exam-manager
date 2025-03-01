@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/students")
+@SuppressWarnings("unused")
 public class StudentController {
 
     private final StudentFacade studentFacade;
@@ -39,6 +40,13 @@ public class StudentController {
         final StudentRequestFilter filter = new StudentRequestFilter(departmentId, groupId, subgroupId);
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(studentFacade.getAllStudents(userInfo, filter, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("{studentId}")
+    @Secured("ROLE_ADMIN")
+    ResponseEntity<StudentDto> getStudentById(@PathVariable(value = "studentId") String studentId) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(studentFacade.getStudent(userInfo, studentId), HttpStatus.OK);
     }
 
     @GetMapping()

@@ -8,7 +8,7 @@ import com.exammanager.core.model.dto.request.UpdateExamRequestDto;
 import com.exammanager.core.model.dto.response.ExamDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/departments/{departmentId}/groups/{groupId}/exams")
+@SuppressWarnings("unused")
 public class ExamController {
 
     private final ExamFacade examFacade;
@@ -36,7 +37,7 @@ public class ExamController {
             @PathVariable("examId") String examId,
             @RequestBody UpdateExamRequestDto dto) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.updateExam(userInfo, departmentId, groupId, examId), HttpStatus.OK);
+        return new ResponseEntity<>(examFacade.updateExam(userInfo, departmentId, groupId, examId, dto), HttpStatus.OK);
     }
 
     @GetMapping("{examId}")
@@ -49,12 +50,22 @@ public class ExamController {
     }
 
     @GetMapping()
-    ResponseEntity<Page<ExamDto>> getAllExamsInGroup(
+    ResponseEntity<PagedModel<ExamDto>> getAllExamsInGroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
-            @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("size") int size) {
+            @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.getExams(userInfo, departmentId, groupId, keyword, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(examFacade.getExams(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/students/{studentId}")
+    ResponseEntity<PagedModel<ExamDto>> getAllExamsByStudentId(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @PathVariable("studentId") String studentId,
+            @RequestParam("page") int page, @RequestParam("size") int size) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examFacade.getExamsByStudentId(userInfo, departmentId, groupId, studentId, page, size), HttpStatus.OK);
     }
 
     @DeleteMapping("{examId}")

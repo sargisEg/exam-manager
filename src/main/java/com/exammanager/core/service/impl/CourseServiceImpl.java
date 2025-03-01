@@ -10,12 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
@@ -59,5 +60,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteByIdAndGroupId(String courseId, String groupId) {
 
+    }
+
+    @Override
+    public List<Course> findByTeacherId(String teacherId) {
+        log.trace("Finding courses with teacher id - {}", teacherId);
+
+        final List<Course> courses = courseRepository.findByTeacherId(teacherId);
+
+        log.trace("Successfully found courses with teacher id - {}, result - {}", teacherId, courses);
+        return courses;
     }
 }

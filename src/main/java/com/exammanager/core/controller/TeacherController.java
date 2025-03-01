@@ -4,6 +4,7 @@ import com.exammanager.common.security.UserInfo;
 import com.exammanager.common.security.UserInfoProvider;
 import com.exammanager.core.facade.core.TeacherFacade;
 import com.exammanager.core.model.dto.request.CreateTeacherRequestDto;
+import com.exammanager.core.model.dto.response.TeacherDto;
 import com.exammanager.user.model.dto.response.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/teachers")
+@SuppressWarnings("unused")
 public class TeacherController {
 
     private final TeacherFacade teacherFacade;
@@ -40,5 +42,12 @@ public class TeacherController {
     ResponseEntity<List<UserDto>> getAllTeachers() {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo), HttpStatus.OK);
+    }
+
+    @GetMapping("{teacherId}")
+    @Secured("ROLE_ADMIN")
+    ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacherId") String teacherId) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, teacherId), HttpStatus.OK);
     }
 }

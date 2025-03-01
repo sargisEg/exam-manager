@@ -6,6 +6,7 @@ import com.exammanager.core.model.params.CreateStudentParams;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
 
@@ -14,4 +15,6 @@ public interface StudentService {
     Page<Student> findAll(StudentRequestFilter filter, int page, int size);
 
     List<Student> findAll(StudentRequestFilter filter);
+
+    Optional<Student> findById(String studentId);
 }

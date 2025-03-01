@@ -152,6 +152,7 @@ public class GroupFacadeImpl implements GroupFacade {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SubgroupDto getSubgroup(UserInfo userInfo, String departmentId, String groupId, String subgroupId) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");
@@ -172,6 +173,7 @@ public class GroupFacadeImpl implements GroupFacade {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SubgroupDto> getSubgroups(UserInfo userInfo, String departmentId, String groupId) {
         Assert.notNull(userInfo, "userInfo should not be null");
         Assert.hasText(departmentId, "departmentId should not be null");

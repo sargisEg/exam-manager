@@ -4,6 +4,7 @@ import com.exammanager.core.model.entity.Course;
 import com.exammanager.core.model.params.CreateCourseParams;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CourseService {
@@ -15,4 +16,6 @@ public interface CourseService {
     Page<Course> findByGroupId(String groupId, int page, int size);
 
     void deleteByIdAndGroupId(String courseId, String groupId);
+
+    List<Course> findByTeacherId(String teacherId);
 }

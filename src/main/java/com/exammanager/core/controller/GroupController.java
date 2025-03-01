@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +20,27 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/departments/{departmentId}/groups")
+@SuppressWarnings("unused")
 public class GroupController {
 
     private final GroupFacade groupFacade;
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     ResponseEntity<GroupDto> createGroup(@PathVariable("departmentId") String departmentId, @Valid @RequestBody CreateGroupRequestDto dto) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(groupFacade.createGroup(userInfo, departmentId, dto), HttpStatus.OK);
     }
 
     @GetMapping("{groupId}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<GroupDto> getGroup(@PathVariable("departmentId") String departmentId, @PathVariable("groupId") String groupId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(groupFacade.getGroup(userInfo, departmentId, groupId), HttpStatus.OK);
     }
 
     @GetMapping()
+    @Secured("ROLE_ADMIN")
     ResponseEntity<PagedModel<GroupDto>> getAllGroupsInDepartment(
             @PathVariable("departmentId") String departmentId,
             @RequestParam("page") int page, @RequestParam("size") int size) {
@@ -44,6 +49,7 @@ public class GroupController {
     }
 
     @PostMapping("{groupId}/subgroups")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<SubgroupDto> createSubgroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -53,6 +59,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups/page")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<PagedModel<SubgroupDto>> getSubgroupsPage(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -62,6 +69,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<List<SubgroupDto>> getSubgroups(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId) {
@@ -69,7 +77,8 @@ public class GroupController {
         return new ResponseEntity<>(groupFacade.getSubgroups(userInfo, departmentId, groupId), HttpStatus.OK);
     }
 
-    @GetMapping("departments/{departmentId}/groups/{groupId}/subgroups/{subgroupId}")
+    @GetMapping("{groupId}/subgroups/{subgroupId}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<SubgroupDto> getSubgroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -79,6 +88,7 @@ public class GroupController {
     }
 
     @DeleteMapping("{groupId}/subgroups/{subgroupId}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<Void> deleteSubgroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -89,6 +99,7 @@ public class GroupController {
     }
 
     @DeleteMapping("{groupId}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<Void> deleteGroup(@PathVariable("departmentId") String departmentId, @PathVariable("groupId") String groupId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         groupFacade.deleteGroup(userInfo, departmentId, groupId);

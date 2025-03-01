@@ -15,4 +15,6 @@ public interface StudentFacade {
     PagedModel<StudentDto> getAllStudents(UserInfo userInfo, StudentRequestFilter filter, int page, int size);
 
     List<StudentDto> getAllStudents(UserInfo userInfo, StudentRequestFilter filter);
+
+    StudentDto getStudent(UserInfo userInfo, String studentId);
 }

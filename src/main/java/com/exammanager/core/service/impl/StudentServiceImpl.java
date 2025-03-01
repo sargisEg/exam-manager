@@ -11,12 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
@@ -52,6 +53,16 @@ public class StudentServiceImpl implements StudentService {
         final List<Student> students = filter.getFilterType().findByFilter(studentRepository);
 
         log.trace("Successfully found all students with filter - {}, result - {}", filter, students);
+        return students;
+    }
+
+    @Override
+    public Optional<Student> findById(String studentId) {
+        log.trace("Finding student with id - {}", studentId);
+
+        final Optional<Student> students = studentRepository.findById(studentId);
+
+        log.trace("Successfully found student with id - {}, result - {}", students, students);
         return students;
     }
 }

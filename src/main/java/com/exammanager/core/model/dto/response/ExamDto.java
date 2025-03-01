@@ -18,4 +18,5 @@ public class ExamDto {
     private Long endDate;
     private Long maxPoints;
     private String status;
+    private String type;
 }

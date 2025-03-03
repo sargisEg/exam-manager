@@ -25,4 +25,22 @@ public class ExamResultServiceImpl implements ExamResultService {
         log.trace("Successfully found exam results by student id - {}, result - {}", studentId, examResults);
         return examResults;
     }
+
+    @Override
+    public Page<ExamResult> findBySubgroupId(String subgroupId, int page, int size) {
+        Assert.hasText(subgroupId, "studentId should not be null");
+        log.trace("Finding exam results by subgroup id - {}", subgroupId);
+        Page<ExamResult> examResults = examResultRepository.findByExamSubgroupId(subgroupId, PageRequest.of(page, size));
+        log.trace("Successfully found exam results by subgroup id - {}, result - {}", subgroupId, examResults);
+        return examResults;
+    }
+
+    @Override
+    public Page<ExamResult> findByCourseId(String courseId, int page, int size) {
+        Assert.hasText(courseId, "courseId should not be null");
+        log.trace("Finding exam results by course id - {}", courseId);
+        Page<ExamResult> examResults = examResultRepository.findByExamCourseId(courseId, PageRequest.of(page, size));
+        log.trace("Successfully found exam results by course id - {}, result - {}", courseId, examResults);
+        return examResults;
+    }
 }

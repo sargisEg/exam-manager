@@ -45,7 +45,7 @@ public class TeacherController {
     }
 
     @GetMapping("{teacherId}")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacherId") String teacherId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, teacherId), HttpStatus.OK);

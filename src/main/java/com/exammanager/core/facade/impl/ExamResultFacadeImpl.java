@@ -50,6 +50,38 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
         return responseDto;
     }
 
+    @Override
+    public PagedModel<ExamResultDto> getAllBySubgroupId(UserInfo userInfo, String departmentId, String groupId, String subgroupId, int page, int size) {
+        log.trace("Getting all exam result for subgroup - {}, for provided request, user - {}", subgroupId, userInfo.id());
+
+        getDepartmentById(departmentId);
+        getGroupById(groupId, departmentId);
+
+
+        final Page<ExamResultDto> p = examResultService.findBySubgroupId(subgroupId, page, size)
+                .map(examMapper::map);
+        final PagedModel<ExamResultDto> responseDto = new PagedModel<>(p);
+
+        log.trace("Successfully got all exam result for subgroup - {}, for provided request, response - {}", subgroupId, responseDto);
+        return responseDto;
+    }
+
+    @Override
+    public PagedModel<ExamResultDto> getAllByCourseId(UserInfo userInfo, String departmentId, String groupId, String courseId, int page, int size) {
+        log.trace("Getting all exam result for course - {}, for provided request, user - {}", courseId, userInfo.id());
+
+        getDepartmentById(departmentId);
+        getGroupById(groupId, departmentId);
+
+
+        final Page<ExamResultDto> p = examResultService.findByCourseId(courseId, page, size)
+                .map(examMapper::map);
+        final PagedModel<ExamResultDto> responseDto = new PagedModel<>(p);
+
+        log.trace("Successfully got all exam result for course - {}, for provided request, response - {}", courseId, responseDto);
+        return responseDto;
+    }
+
     private Department getDepartmentById(String departmentId) {
         return departmentService.findById(departmentId).orElseThrow(() ->
                 new NotFoundException(

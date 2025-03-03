@@ -38,6 +38,9 @@ public class Exam extends BaseEntity {
     @Column(name = "max_points", nullable = false)
     private Long maxPoints;
 
+    @Column(name = "is_graded", nullable = false)
+    private Boolean isGraded;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ExamStatus status;

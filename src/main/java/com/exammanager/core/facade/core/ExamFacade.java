@@ -4,7 +4,10 @@ import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.model.dto.request.CreateExamRequestDto;
 import com.exammanager.core.model.dto.request.UpdateExamRequestDto;
 import com.exammanager.core.model.dto.response.ExamDto;
+import com.exammanager.core.model.enums.ExamStatus;
 import org.springframework.data.web.PagedModel;
+
+import java.util.List;
 
 public interface ExamFacade {
 
@@ -19,4 +22,11 @@ public interface ExamFacade {
     void deleteExam(UserInfo userInfo, String departmentId, String groupId, String examId);
 
     PagedModel<ExamDto> getExamsByStudentId(UserInfo userInfo, String departmentId, String groupId, String studentId, int page, int size);
+
+    PagedModel<ExamDto> getExamsBySubgroupId(UserInfo userInfo, String departmentId, String groupId, String subgroupId, ExamStatus status, int page, int size);
+
+    PagedModel<ExamDto> getExamsByCourseId(UserInfo userInfo, String departmentId, String groupId, String courseId, ExamStatus status, int page, int size);
+
+    List<ExamDto> getExamsMe(UserInfo userInfo);
+
 }

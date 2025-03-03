@@ -33,7 +33,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<GroupDto> getGroup(@PathVariable("departmentId") String departmentId, @PathVariable("groupId") String groupId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(groupFacade.getGroup(userInfo, departmentId, groupId), HttpStatus.OK);
@@ -59,7 +59,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups/page")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<PagedModel<SubgroupDto>> getSubgroupsPage(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -78,7 +78,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups/{subgroupId}")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<SubgroupDto> getSubgroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,

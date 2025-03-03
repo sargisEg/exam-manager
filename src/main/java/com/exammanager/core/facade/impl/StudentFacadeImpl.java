@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -29,6 +30,7 @@ public class StudentFacadeImpl implements StudentFacade {
     private final StudentService studentService;
     private final SubgroupService subgroupService;
     private final StudentMapper studentMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -43,6 +45,7 @@ public class StudentFacadeImpl implements StudentFacade {
                         "Not found subgroup with id - " + dto.getSubgroupId()
                 ));
 
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         final StudentDto responseDto = studentMapper.map(studentService.create(studentMapper.map(dto, subgroup)));
 
         log.debug("Successfully created student for provided request - {}, response - {}", dto, responseDto);

@@ -13,6 +13,5 @@ import java.util.List;
 public class TeacherDto {
 
     private UserDto user;
-    private List<SubgroupDto> subgroups;
     private List<CourseDto> courses;
 }

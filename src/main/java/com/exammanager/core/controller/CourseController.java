@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class CourseController {
     private final CourseFacade courseFacade;
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     ResponseEntity<CourseDto> createCourse(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -29,6 +31,7 @@ public class CourseController {
     }
 
     @GetMapping("{courseId}")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<CourseDto> getCourse(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -38,6 +41,7 @@ public class CourseController {
     }
 
     @GetMapping()
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<PagedModel<CourseDto>> getAllCoursesInGroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,

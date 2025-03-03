@@ -21,7 +21,7 @@ public class UpdateExamRequestDto {
 
     @NotNull(message = "subgroup Id should not be null")
     @NotBlank(message = "subgroup Id should not be empty")
-    private String subGroupId;
+    private String subgroupId;
 
     @NotNull(message = "location should not be null")
     @NotBlank(message = "location should not be empty")

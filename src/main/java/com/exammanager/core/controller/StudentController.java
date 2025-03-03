@@ -31,7 +31,7 @@ public class StudentController {
     }
 
     @GetMapping("page")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<PagedModel<StudentDto>> getAllStudents(
             @RequestParam(value = "department", required = false) String departmentId,
             @RequestParam(value = "group", required = false) String groupId,
@@ -50,7 +50,7 @@ public class StudentController {
     }
 
     @GetMapping()
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<List<StudentDto>> getAllStudents(
             @RequestParam(value = "department", required = false) String departmentId,
             @RequestParam(value = "group", required = false) String groupId,

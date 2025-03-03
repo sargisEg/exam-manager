@@ -28,6 +28,26 @@ public class ExamResultsControllerController {
         return new ResponseEntity<>(examResultFacade.getAllByGroupId(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
     }
 
+    @GetMapping("subgroups/{subgroupId}")
+    ResponseEntity<PagedModel<ExamResultDto>> getAllExamResultsBySubgroupId(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @PathVariable("subgroupId") String subgroupId,
+            @RequestParam("page") int page, @RequestParam("size") int size) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examResultFacade.getAllBySubgroupId(userInfo, departmentId, groupId, subgroupId, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("courses/{courseId}")
+    ResponseEntity<PagedModel<ExamResultDto>> getAllExamResultsByCourseId(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @PathVariable("courseId") String courseId,
+            @RequestParam("page") int page, @RequestParam("size") int size) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examResultFacade.getAllByCourseId(userInfo, departmentId, groupId, courseId, page, size), HttpStatus.OK);
+    }
+
     @GetMapping("students/{studentId}")
     @Secured("ROLE_ADMIN")
     ResponseEntity<PagedModel<ExamResultDto>> getAllExamResultsByStudentId(

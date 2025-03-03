@@ -25,6 +25,7 @@ public class ExamMapperImpl implements ExamMapper {
                 exam.getStartDate(),
                 exam.getEndDate(),
                 exam.getMaxPoints(),
+                exam.getIsGraded(),
                 exam.getStatus().name(),
                 exam.getType().name()
         );

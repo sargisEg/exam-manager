@@ -8,10 +8,10 @@ import com.exammanager.core.mapper.GroupMapper;
 import com.exammanager.core.mapper.TeacherMapper;
 import com.exammanager.core.model.dto.request.CreateTeacherRequestDto;
 import com.exammanager.core.model.dto.response.CourseDto;
-import com.exammanager.core.model.dto.response.SubgroupDto;
 import com.exammanager.core.model.dto.response.TeacherDto;
 import com.exammanager.core.model.entity.Teacher;
 import com.exammanager.core.service.core.CourseService;
+import com.exammanager.core.service.core.SubgroupService;
 import com.exammanager.core.service.core.TeacherService;
 import com.exammanager.user.mapper.UserMapper;
 import com.exammanager.user.model.dto.response.UserDto;
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -34,8 +35,10 @@ public class TeacherFacadeImpl implements TeacherFacade {
     private final CourseService courseService;
     private final TeacherMapper teacherMapper;
     private final UserMapper userMapper;
+    private final SubgroupService subgroupService;
     private final GroupMapper groupMapper;
     private final CourseMapper courseMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -59,6 +62,7 @@ public class TeacherFacadeImpl implements TeacherFacade {
         Assert.notNull(dto, "dto should not be null");
         log.debug("Creating teacher for provided request - {}, user - {}", dto, userInfo.id());
 
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         final UserDto responseDto = userMapper.map(teacherService.create(teacherMapper.map(dto)));
 
         log.debug("Successfully created teacher for provided request, response - {}", responseDto);
@@ -91,9 +95,6 @@ public class TeacherFacadeImpl implements TeacherFacade {
                     "Not found teacher with id - " + teacherId,
                     "Not found teacher with id - " + teacherId
             ));
-        final List<SubgroupDto> subgroups = teacher.getSubgroups().stream()
-                .map(groupMapper::map)
-                .toList();
 
         final List<CourseDto> courses = courseService.findByTeacherId(teacherId).stream()
                 .map(courseMapper::map)
@@ -101,7 +102,6 @@ public class TeacherFacadeImpl implements TeacherFacade {
 
         final TeacherDto responseDto = new TeacherDto(
                 userMapper.map(teacher),
-                subgroups,
                 courses
         );
 

@@ -6,8 +6,6 @@ import com.exammanager.core.model.params.CreateTeacherParams;
 import com.exammanager.user.model.enums.Role;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-
 @Component
 public class TeacherMapperImpl implements TeacherMapper {
 
@@ -30,8 +28,7 @@ public class TeacherMapperImpl implements TeacherMapper {
                 params.getEmail(),
                 params.getPhone(),
                 params.getPassword(),
-                Role.TEACHER,
-                Collections.emptySet()
+                Role.TEACHER
         );
     }
 }

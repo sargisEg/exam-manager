@@ -4,6 +4,7 @@ import com.exammanager.common.security.UserInfo;
 import com.exammanager.common.security.UserInfoProvider;
 import com.exammanager.core.facade.core.ExamFacade;
 import com.exammanager.core.model.dto.request.CreateExamRequestDto;
+import com.exammanager.core.model.dto.request.GradeExamRequestDto;
 import com.exammanager.core.model.dto.request.UpdateExamRequestDto;
 import com.exammanager.core.model.dto.response.ExamDto;
 import com.exammanager.core.model.enums.ExamStatus;
@@ -26,6 +27,7 @@ public class ExamController {
     private final ExamFacade examFacade;
 
     @PostMapping("departments/{departmentId}/groups/{groupId}/exams")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<ExamDto> createExam(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -35,6 +37,7 @@ public class ExamController {
     }
 
     @PutMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<ExamDto> updateExam(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -43,6 +46,17 @@ public class ExamController {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(examFacade.updateExam(userInfo, departmentId, groupId, examId, dto), HttpStatus.OK);
     }
+
+    @PutMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}/grade")
+    ResponseEntity<ExamDto> gradeExam(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @PathVariable("examId") String examId,
+            @RequestBody GradeExamRequestDto dto) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examFacade.gradeExam(userInfo, departmentId, groupId, examId, dto), HttpStatus.OK);
+    }
+
 
     @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
     ResponseEntity<ExamDto> getExam(
@@ -63,9 +77,11 @@ public class ExamController {
     }
 
     @GetMapping("exams/me")
-    ResponseEntity<List<ExamDto>> getExamsMe() {
+    ResponseEntity<List<ExamDto>> getExamsMe(
+            @RequestParam(value = "status", required = false) ExamStatus status
+    ) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.getExamsMe(userInfo), HttpStatus.OK);
+        return new ResponseEntity<>(examFacade.getExamsMe(userInfo, status), HttpStatus.OK);
     }
 
     @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/subgroups/{subgroupId}")
@@ -80,7 +96,7 @@ public class ExamController {
     }
 
     @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/courses/{courseId}")
-    @Secured("ROLE_TEACHER")
+    @Secured({"ROLE_TEACHER", "ROLE_STUDENT"})
     ResponseEntity<PagedModel<ExamDto>> getAllExamsByCourseId(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -102,6 +118,7 @@ public class ExamController {
     }
 
     @DeleteMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<Void> deleteExam(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,

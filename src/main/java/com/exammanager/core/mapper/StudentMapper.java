@@ -8,9 +8,9 @@ import com.exammanager.core.model.params.CreateStudentParams;
 
 public interface StudentMapper {
 
-    StudentDto map(Student student);
-
     Student map(CreateStudentParams params);
 
     CreateStudentParams map(CreateStudentRequestDto dto, Subgroup subgroup);
+
+    StudentDto map(Student student);
 }

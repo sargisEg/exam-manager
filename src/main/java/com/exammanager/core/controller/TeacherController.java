@@ -45,9 +45,16 @@ public class TeacherController {
     }
 
     @GetMapping("{teacherId}")
-    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
+    @Secured({"ROLE_ADMIN"})
     ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacherId") String teacherId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, teacherId), HttpStatus.OK);
+    }
+
+    @GetMapping("me")
+    @Secured({"ROLE_TEACHER"})
+    ResponseEntity<TeacherDto> me() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, userInfo.id()), HttpStatus.OK);
     }
 }

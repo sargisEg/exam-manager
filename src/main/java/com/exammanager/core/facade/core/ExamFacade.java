@@ -2,6 +2,7 @@ package com.exammanager.core.facade.core;
 
 import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.model.dto.request.CreateExamRequestDto;
+import com.exammanager.core.model.dto.request.GradeExamRequestDto;
 import com.exammanager.core.model.dto.request.UpdateExamRequestDto;
 import com.exammanager.core.model.dto.response.ExamDto;
 import com.exammanager.core.model.enums.ExamStatus;
@@ -27,6 +28,7 @@ public interface ExamFacade {
 
     PagedModel<ExamDto> getExamsByCourseId(UserInfo userInfo, String departmentId, String groupId, String courseId, ExamStatus status, int page, int size);
 
-    List<ExamDto> getExamsMe(UserInfo userInfo);
+    List<ExamDto> getExamsMe(UserInfo userInfo, ExamStatus status);
 
+    ExamDto gradeExam(UserInfo userInfo, String departmentId, String groupId, String examId, GradeExamRequestDto dto);
 }

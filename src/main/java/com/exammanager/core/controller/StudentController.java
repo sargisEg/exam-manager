@@ -59,4 +59,11 @@ public class StudentController {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(studentFacade.getAllStudents(userInfo, filter), HttpStatus.OK);
     }
+
+    @GetMapping("me")
+    @Secured({"ROLE_STUDENT"})
+    ResponseEntity<StudentDto> me() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(studentFacade.getStudent(userInfo, userInfo.id()), HttpStatus.OK);
+    }
 }

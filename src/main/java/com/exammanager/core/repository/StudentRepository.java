@@ -20,4 +20,6 @@ public interface StudentRepository extends UserRepository<Student> {
 
     List<Student> findAllBySubgroupGroupId(String groupId);
 
+    List<Student> findBySubgroupId(String subgroupId);
+
 }

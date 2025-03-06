@@ -60,9 +60,19 @@ public class StudentServiceImpl implements StudentService {
     public Optional<Student> findById(String studentId) {
         log.trace("Finding student with id - {}", studentId);
 
-        final Optional<Student> students = studentRepository.findById(studentId);
+        final Optional<Student> student = studentRepository.findById(studentId);
 
-        log.trace("Successfully found student with id - {}, result - {}", students, students);
+        log.trace("Successfully found student with id - {}, result - {}", studentId, student);
+        return student;
+    }
+
+    @Override
+    public List<Student> findBySubgroupId(String subgroupId) {
+        log.trace("Finding student with subgroup id - {}", subgroupId);
+
+        final List<Student> students = studentRepository.findBySubgroupId(subgroupId);
+
+        log.trace("Successfully found student with subgroup id - {}, result - {}", subgroupId, students);
         return students;
     }
 }

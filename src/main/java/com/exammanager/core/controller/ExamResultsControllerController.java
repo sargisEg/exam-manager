@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/departments/{departmentId}/groups/{groupId}/exam-results")
@@ -28,6 +30,16 @@ public class ExamResultsControllerController {
         return new ResponseEntity<>(examResultFacade.getAllByGroupId(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
     }
 
+    @GetMapping("me")
+    ResponseEntity<PagedModel<ExamResultDto>> getMyExamResults(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @RequestParam("courseId") String courseId,
+            @RequestParam("page") int page, @RequestParam("size") int size) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examResultFacade.getMyResults(userInfo, departmentId, groupId, courseId, page, size), HttpStatus.OK);
+    }
+
     @GetMapping("subgroups/{subgroupId}")
     ResponseEntity<PagedModel<ExamResultDto>> getAllExamResultsBySubgroupId(
             @PathVariable("departmentId") String departmentId,
@@ -39,6 +51,7 @@ public class ExamResultsControllerController {
     }
 
     @GetMapping("courses/{courseId}")
+    @Secured("ROLE_STUDENT")
     ResponseEntity<PagedModel<ExamResultDto>> getAllExamResultsByCourseId(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -57,5 +70,15 @@ public class ExamResultsControllerController {
             @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(examResultFacade.getAllByStudentId(userInfo, departmentId, groupId, studentId, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("exams/{examId}")
+    @Secured("ROLE_ADMIN")
+    ResponseEntity<List<ExamResultDto>> getAllExamResultsByStudentId(
+            @PathVariable("departmentId") String departmentId,
+            @PathVariable("groupId") String groupId,
+            @PathVariable("examId") String examId) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examResultFacade.getAllByExamId(userInfo, departmentId, groupId, examId), HttpStatus.OK);
     }
 }

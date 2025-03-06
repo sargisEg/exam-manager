@@ -36,16 +36,17 @@ public class SecurityConfig {
     private final UserSessionService userSessionService;
 
     @Bean
+    @SuppressWarnings("unused")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exceptionHandlingConfigurer -> {
-                    exceptionHandlingConfigurer.authenticationEntryPoint((request, response, authException) -> {
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                    });
-                })
+                .exceptionHandling(exceptionHandlingConfigurer ->
+                    exceptionHandlingConfigurer.authenticationEntryPoint((request, response, authException) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                    )
+                )
                 .addFilterAfter(new JwtAuthFilter(authenticationManager()), ExceptionTranslationFilter.class)
                 .authenticationManager(authenticationManager())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -62,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5000", "https://fd6d33d0-442a-4c89-94bc-7f9b18f816f9-00-1zuevcyhe8a2d.picard.replit.dev"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -72,6 +73,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @SuppressWarnings("unused")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }

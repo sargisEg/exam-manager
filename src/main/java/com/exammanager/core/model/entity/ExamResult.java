@@ -23,4 +23,11 @@ public class ExamResult extends BaseEntity {
 
     @Column(name = "point", nullable = false)
     private Integer point;
+
+    public ExamResult(String id, Long createdAt, Long updatedAt, Student student, Exam exam, Integer point) {
+        super(id, createdAt, updatedAt);
+        this.student = student;
+        this.exam = exam;
+        this.point = point;
+    }
 }

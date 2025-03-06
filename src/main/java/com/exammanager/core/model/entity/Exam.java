@@ -10,7 +10,6 @@ import lombok.*;
 @ToString(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "EXAMS")
 public class Exam extends BaseEntity {
@@ -48,4 +47,18 @@ public class Exam extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private ExamType type;
+
+    public Exam(Long createdAt, Long updatedAt, String title, Course course, Subgroup subgroup, String location, Long startDate, Long endDate, Long maxPoints, Boolean isGraded, ExamStatus status, ExamType type) {
+        super(createdAt, updatedAt);
+        this.title = title;
+        this.course = course;
+        this.subgroup = subgroup;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxPoints = maxPoints;
+        this.isGraded = isGraded;
+        this.status = status;
+        this.type = type;
+    }
 }

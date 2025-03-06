@@ -17,4 +17,6 @@ public interface StudentService {
     List<Student> findAll(StudentRequestFilter filter);
 
     Optional<Student> findById(String studentId);
+
+    List<Student> findBySubgroupId(String subgroupId);
 }

@@ -16,17 +16,6 @@ public class StudentMapperImpl implements StudentMapper {
     private final GroupMapper groupMapper;
 
     @Override
-    public StudentDto map(Student student) {
-        return new StudentDto(
-                student.getId(),
-                student.getEmail(),
-                student.getFullName(),
-                student.getPhone(),
-                groupMapper.map(student.getSubgroup())
-        );
-    }
-
-    @Override
     public Student map(CreateStudentParams params) {
         return new Student(
                 System.currentTimeMillis(),
@@ -48,6 +37,17 @@ public class StudentMapperImpl implements StudentMapper {
                 dto.getPhone(),
                 dto.getPassword(),
                 subgroup
+        );
+    }
+
+    @Override
+    public StudentDto map(Student student) {
+        return new StudentDto(
+                student.getId(),
+                student.getEmail(),
+                student.getFullName(),
+                student.getPhone(),
+                groupMapper.map(student.getSubgroup())
         );
     }
 }

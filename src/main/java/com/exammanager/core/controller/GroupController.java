@@ -69,7 +69,7 @@ public class GroupController {
     }
 
     @GetMapping("{groupId}/subgroups")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
     ResponseEntity<List<SubgroupDto>> getSubgroups(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId) {

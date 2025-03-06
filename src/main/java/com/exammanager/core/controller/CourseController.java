@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/core/v1/departments/{departmentId}/groups/{groupId}/courses")
+@SuppressWarnings("unused")
 public class CourseController {
 
     private final CourseFacade courseFacade;
@@ -31,7 +32,7 @@ public class CourseController {
     }
 
     @GetMapping("{courseId}")
-    @Secured("ROLE_TEACHER")
+    @Secured({"ROLE_TEACHER", "ROLE_STUDENT"})
     ResponseEntity<CourseDto> getCourse(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,
@@ -41,7 +42,7 @@ public class CourseController {
     }
 
     @GetMapping()
-    @Secured({"ROLE_ADMIN", "ROLE_TEACHER"})
+    @Secured({"ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT"})
     ResponseEntity<PagedModel<CourseDto>> getAllCoursesInGroup(
             @PathVariable("departmentId") String departmentId,
             @PathVariable("groupId") String groupId,

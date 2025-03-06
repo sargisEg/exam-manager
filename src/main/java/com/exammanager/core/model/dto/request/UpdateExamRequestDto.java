@@ -15,14 +15,6 @@ public class UpdateExamRequestDto {
     @NotBlank(message = "title should not be empty")
     private String title;
 
-    @NotNull(message = "course Id should not be null")
-    @NotBlank(message = "course Id should not be empty")
-    private String courseId;
-
-    @NotNull(message = "subgroup Id should not be null")
-    @NotBlank(message = "subgroup Id should not be empty")
-    private String subgroupId;
-
     @NotNull(message = "location should not be null")
     @NotBlank(message = "location should not be empty")
     private String location;
@@ -34,5 +26,5 @@ public class UpdateExamRequestDto {
     private Long endDate;
 
     @NotNull(message = "max points should not be null")
-    private Long maxPoints;
+    private Integer maxPoints;
 }

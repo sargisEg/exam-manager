@@ -1,5 +1,6 @@
 package com.exammanager.core.model.dto.request;
 
+import com.exammanager.core.model.enums.ExamType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class CreateExamRequestDto {
 
     @NotNull(message = "subgroup Id should not be null")
     @NotBlank(message = "subgroup Id should not be empty")
-    private String subGroupId;
+    private String subgroupId;
 
     @NotNull(message = "location should not be null")
     @NotBlank(message = "location should not be empty")
@@ -35,4 +36,7 @@ public class CreateExamRequestDto {
 
     @NotNull(message = "max points should not be null")
     private Long maxPoints;
+
+    @NotNull(message = "max points should not be null")
+    private ExamType type;
 }

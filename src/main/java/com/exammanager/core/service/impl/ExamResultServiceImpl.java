@@ -1,6 +1,9 @@
 package com.exammanager.core.service.impl;
 
+import com.exammanager.common.service.UuidProvider;
+import com.exammanager.core.model.entity.Exam;
 import com.exammanager.core.model.entity.ExamResult;
+import com.exammanager.core.model.entity.Student;
 import com.exammanager.core.repository.ExamResultRepository;
 import com.exammanager.core.service.core.ExamResultService;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +13,35 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExamResultServiceImpl implements ExamResultService {
 
     private final ExamResultRepository examResultRepository;
+    private final UuidProvider uuidProvider;
+
+    @Override
+    public ExamResult create(Student student, Exam exam, Integer point) {
+        Assert.notNull(student, "student should not be null");
+        Assert.notNull(exam, "exam should not be null");
+        Assert.notNull(point, "point should not be null");
+        log.trace("Creating exam result student - {}, exam - {}, point - {}", student, exam, point);
+
+        final ExamResult examResult = examResultRepository.save(new ExamResult(
+                uuidProvider.getUuid(),
+                System.currentTimeMillis(),
+                System.currentTimeMillis(),
+                student,
+                exam,
+                point
+        ));
+
+        log.trace("Successfully created exam result student - {}, exam - {}, point - {}, result - {}", student, exam, point, examResult);
+        return examResult;
+    }
 
     @Override
     public Page<ExamResult> findByStudentId(String studentId, int page, int size) {
@@ -23,6 +49,16 @@ public class ExamResultServiceImpl implements ExamResultService {
         log.trace("Finding exam results by student id - {}", studentId);
         Page<ExamResult> examResults = examResultRepository.findByStudentId(studentId, PageRequest.of(page, size));
         log.trace("Successfully found exam results by student id - {}, result - {}", studentId, examResults);
+        return examResults;
+    }
+
+    @Override
+    public Page<ExamResult> findByStudentId(String studentId, String courseId, int page, int size) {
+        Assert.hasText(studentId, "studentId should not be null");
+        Assert.hasText(courseId, "courseId should not be null");
+        log.trace("Finding exam results by student id - {} and course id - {}", studentId, courseId);
+        Page<ExamResult> examResults = examResultRepository.findByStudentIdAndExamCourseId(studentId, courseId, PageRequest.of(page, size));
+        log.trace("Successfully found exam results by student id - {} and course id - {}, result - {}", studentId, courseId, examResults);
         return examResults;
     }
 
@@ -41,6 +77,15 @@ public class ExamResultServiceImpl implements ExamResultService {
         log.trace("Finding exam results by course id - {}", courseId);
         Page<ExamResult> examResults = examResultRepository.findByExamCourseId(courseId, PageRequest.of(page, size));
         log.trace("Successfully found exam results by course id - {}, result - {}", courseId, examResults);
+        return examResults;
+    }
+
+    @Override
+    public List<ExamResult> findByExamId(String examId) {
+        Assert.hasText(examId, "examId should not be null");
+        log.trace("Finding exam results by exam id - {}", examId);
+        List<ExamResult> examResults = examResultRepository.findByExamId(examId);
+        log.trace("Successfully found exam results by exam id - {}, result - {}", examId, examResults);
         return examResults;
     }
 }

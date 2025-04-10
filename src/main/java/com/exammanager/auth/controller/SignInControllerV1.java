@@ -36,7 +36,6 @@ public class SignInControllerV1 {
         return new ResponseEntity<>(signInResponseDto, HttpStatus.OK);
     }
 
-
     @PostMapping("test")
     @Secured("ROLE_TEACHER")
     ResponseEntity<String> signIn() {

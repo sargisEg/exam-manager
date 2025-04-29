@@ -1,17 +1,16 @@
 package com.exammanager.core.facade.impl;
 
+import com.exammanager.common.exception.ConflictException;
 import com.exammanager.common.exception.NotFoundException;
 import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.facade.core.CourseFacade;
 import com.exammanager.core.mapper.CourseMapper;
 import com.exammanager.core.model.dto.request.CreateCourseRequestDto;
 import com.exammanager.core.model.dto.response.CourseDto;
+import com.exammanager.core.model.entity.Exam;
 import com.exammanager.core.model.entity.Group;
 import com.exammanager.core.model.entity.Teacher;
-import com.exammanager.core.service.core.CourseService;
-import com.exammanager.core.service.core.GroupService;
-import com.exammanager.core.service.core.StudentService;
-import com.exammanager.core.service.core.TeacherService;
+import com.exammanager.core.service.core.*;
 import com.exammanager.utils.GroupUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +29,8 @@ public class CourseFacadeImpl implements CourseFacade {
     private final GroupService groupService;
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final MaterialService materialService;
+    private final ExamService examService;
 
     private final CourseMapper courseMapper;
 
@@ -71,9 +72,16 @@ public class CourseFacadeImpl implements CourseFacade {
         Assert.hasText(courseId, "courseId should not be null");
         log.debug("Deleting course by id - {}, user - {}", courseId, userInfo.id());
 
-        courseService.deleteById(courseId);
-
-        log.debug("Successfully deleted course by id - {}", courseId);
+        final List<Exam> exams = examService.findByCourseId(courseId);
+        if (exams.isEmpty()) {
+            materialService.deleteByCourseId(courseId);
+            courseService.deleteById(courseId);
+            log.debug("Successfully deleted course by id - {}", courseId);
+        }
+        throw new ConflictException(
+                "Cannot delete course. Please check exams",
+                "Cannot delete course. Please check exams"
+        );
     }
 
     @Override

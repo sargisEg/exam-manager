@@ -73,10 +73,6 @@ public class CourseServiceImpl implements CourseService {
         return courses;
     }
 
-    @Override
-    public void deleteByIdAndGroupId(String courseId, String groupId) {
-
-    }
 
     @Override
     public List<Course> findByTeacherId(String teacherId) {
@@ -89,16 +85,6 @@ public class CourseServiceImpl implements CourseService {
         return courses;
     }
 
-    @Override
-    public Page<Course> findByTeacherId(String teacherId, int page, int size) {
-        Assert.hasText(teacherId, "teacherId should not be null");
-        log.trace("Finding courses page with teacher id - {}", teacherId);
-
-        final Page<Course> courses = courseRepository.findByTeacherId(teacherId, PageRequest.of(page, size));
-
-        log.trace("Successfully found courses page with teacher id - {}, result - {}", teacherId, courses);
-        return courses;
-    }
 
     @Override
     public void deleteById(String courseId) {
@@ -127,5 +113,16 @@ public class CourseServiceImpl implements CourseService {
         log.trace("Successfully found course with id - {} and teacher id - {}, result - {}", courseId, teacherId, courses);
         return courses;
 
+    }
+
+    @Override
+    public Optional<Course> findById(String courseId) {
+        Assert.hasText(courseId, "courseId should not be null");
+        log.trace("Finding course with id - {}", courseId);
+
+        final Optional<Course> course = courseRepository.findById(courseId);
+
+        log.trace("Successfully found course with id - {}, result - {}", courseId, course);
+        return course;
     }
 }

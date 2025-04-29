@@ -109,4 +109,17 @@ public class TeacherFacadeImpl implements TeacherFacade {
         log.trace("Successfully found teacher with id - {}, response - {}", teacherId, responseDto);
         return responseDto;
     }
+
+    @Override
+    @Transactional
+    public void deleteTeacherById(UserInfo userInfo, String teacherId) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        Assert.hasText(teacherId, "teacherId should not be null");
+        log.trace("Deleting teacher with id - {}, user - {}", teacherId, userInfo.id());
+
+        courseService.deleteByTeacherId(teacherId);
+        teacherService.deleteById(teacherId);
+
+        log.trace("Successfully deleted teacher with id - {}", teacherId);
+    }
 }

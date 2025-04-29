@@ -1,4 +1,4 @@
-package com.exammanager.core.controller;
+package com.exammanager.core.controller.admin;
 
 import com.exammanager.common.security.UserInfo;
 import com.exammanager.common.security.UserInfoProvider;
@@ -17,44 +17,42 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/core/v1/teachers")
+@RequestMapping("api/core/v1/admin/teachers")
 @SuppressWarnings("unused")
-public class TeacherController {
+@Secured("ROLE_ADMIN")
+public class AdminTeacherController {
 
     private final TeacherFacade teacherFacade;
 
-    @PostMapping()
-    @Secured("ROLE_ADMIN")
-    ResponseEntity<UserDto> createTeacher(@RequestBody CreateTeacherRequestDto dto) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(teacherFacade.createTeacher(userInfo, dto), HttpStatus.OK);
-    }
-
-    @GetMapping("/page")
-    @Secured("ROLE_ADMIN")
-    ResponseEntity<PagedModel<UserDto>> getAllTeachersPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo, page, size), HttpStatus.OK);
-    }
 
     @GetMapping()
-    @Secured("ROLE_ADMIN")
     ResponseEntity<List<UserDto>> getAllTeachers() {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo), HttpStatus.OK);
     }
 
+    @GetMapping("/page")
+    ResponseEntity<PagedModel<UserDto>> getAllTeachersPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(teacherFacade.getAllTeachers(userInfo, page, size), HttpStatus.OK);
+    }
+
+    @PostMapping()
+    ResponseEntity<UserDto> createTeacher(@RequestBody CreateTeacherRequestDto dto) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(teacherFacade.createTeacher(userInfo, dto), HttpStatus.OK);
+    }
+
     @GetMapping("{teacherId}")
-    @Secured({"ROLE_ADMIN"})
     ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacherId") String teacherId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, teacherId), HttpStatus.OK);
     }
 
-    @GetMapping("me")
-    @Secured({"ROLE_TEACHER"})
-    ResponseEntity<TeacherDto> me() {
+    @DeleteMapping("{teacherId}")
+    ResponseEntity<Void> deleteTeacherById(@PathVariable("teacherId") String teacherId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(teacherFacade.getTeacherById(userInfo, userInfo.id()), HttpStatus.OK);
+        teacherFacade.deleteTeacherById(userInfo, teacherId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

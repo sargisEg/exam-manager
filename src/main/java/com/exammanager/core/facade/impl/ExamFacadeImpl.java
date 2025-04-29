@@ -32,7 +32,6 @@ import java.util.stream.Stream;
 public class ExamFacadeImpl implements ExamFacade {
 
     private final ExamService examService;
-    private final DepartmentService departmentService;
     private final GroupService groupService;
     private final SubgroupService subgroupService;
     private final CourseService courseService;
@@ -43,17 +42,13 @@ public class ExamFacadeImpl implements ExamFacade {
 
     @Override
     @Transactional
-    public ExamDto createExam(UserInfo userInfo, String departmentId, String groupId, CreateExamRequestDto dto) {
+    public ExamDto createExam(UserInfo userInfo, CreateExamRequestDto dto) {
         Assert.notNull(userInfo, "userInfo should not be null");
-        Assert.hasText(departmentId, "departmentId should not be null");
-        Assert.hasText(groupId, "groupId should not be null");
         Assert.notNull(dto, "dto should not be null");
         log.debug("Creating exam for provided request - {}", dto);
 
-        getDepartmentById(departmentId);
-        getGroupById(groupId, departmentId);
-        final Subgroup subgroup = getSubgroupById(dto.getSubgroupId(), groupId);
-        final Course course = getCourseById(dto.getCourseId(), groupId);
+        final Subgroup subgroup = getSubgroupById(dto.getSubgroupId(), "groupId");
+        final Course course = getCourseById(dto.getCourseId(), "groupId");
 
         final Exam exam = examService.create(examMapper.map(dto, course, subgroup));
         final ExamDto responseDto = examMapper.map(exam);
@@ -72,7 +67,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.notNull(dto, "dto should not be null");
         log.debug("Updating exam with id - {} for provided request - {}, user - {}", examId, dto, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
         final ExamDto responseDto = examService.update(examMapper.map(examId, dto))
@@ -95,7 +89,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.notNull(dto, "dto should not be null");
         log.debug("Grading exam for provided request - {}, user - {}", dto, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
         final Exam exam = getExamById(examId);
 
@@ -137,7 +130,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.hasText(groupId, "groupId should not be null");
         Assert.hasText(examId, "examId should not be null");
         log.debug("Removing exam - {} for provided request user - {}", examId, userInfo.id());
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
         examService.deleteById(examId);
@@ -154,7 +146,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.hasText(studentId, "studentId should not be null");
         log.trace("Getting exams for student - {}, for provided request, user - {}", studentId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
         final Student student = getStudentById(studentId);
 
@@ -175,7 +166,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.notNull(status, "status should not be null");
         log.trace("Getting exams for course - {}, for provided request, user - {}", courseId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
         final Page<ExamDto> p = examService.findByCourseIdAndStatus(courseId, status, page, size)
@@ -195,7 +185,6 @@ public class ExamFacadeImpl implements ExamFacade {
         Assert.notNull(status, "status should not be null");
         log.trace("Getting exams for subgroup - {}, for provided request, user - {}", subgroupId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
         final Page<ExamDto> p = examService.findBySubgroupIdAndStatus(subgroupId, status, page, size)
@@ -238,16 +227,8 @@ public class ExamFacadeImpl implements ExamFacade {
         return responseDto;
     }
 
-    private void getDepartmentById(String departmentId) {
-        departmentService.findById(departmentId).orElseThrow(() ->
-                new NotFoundException(
-                        "Not found department with id - " + departmentId,
-                        "Not found department with id - " + departmentId
-                ));
-    }
-
     private void getGroupById(String groupId, String departmentId) {
-        groupService.findByIdAndDepartmentId(groupId, departmentId).orElseThrow(() ->
+        groupService.findById(groupId).orElseThrow(() ->
                 new NotFoundException(
                         "Not found group with id - " + groupId + "and department id - " + departmentId,
                         "Not found group with id - " + groupId

@@ -26,14 +26,11 @@ public class ExamController {
 
     private final ExamFacade examFacade;
 
-    @PostMapping("departments/{departmentId}/groups/{groupId}/exams")
+    @PostMapping("exams")
     @Secured("ROLE_TEACHER")
-    ResponseEntity<ExamDto> createExam(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @Valid @RequestBody CreateExamRequestDto dto) {
+    ResponseEntity<ExamDto> createExam(@Valid @RequestBody CreateExamRequestDto dto) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.createExam(userInfo, departmentId, groupId, dto), HttpStatus.OK);
+        return new ResponseEntity<>(examFacade.createExam(userInfo, dto), HttpStatus.OK);
     }
 
     @PutMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")

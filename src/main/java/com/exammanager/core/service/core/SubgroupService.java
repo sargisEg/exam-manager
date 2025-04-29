@@ -13,7 +13,7 @@ public interface SubgroupService {
 
     Page<Subgroup> findByGroupId(String groupId, int page, int size);
 
-    void deleteByIdAndGroupId(String subgroupId, String groupId);
+    void deleteById(String subgroupId);
 
     Optional<Subgroup> findByIdAndGroupId(String subgroupId, String groupId);
 

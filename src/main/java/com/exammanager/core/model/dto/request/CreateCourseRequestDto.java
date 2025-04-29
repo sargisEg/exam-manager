@@ -15,6 +15,10 @@ public class CreateCourseRequestDto {
     @NotBlank(message = "name should not be empty")
     private String name;
 
+    @NotNull(message = "groupId should not be null")
+    @NotBlank(message = "groupId should not be empty")
+    private String groupId;
+
     @NotNull(message = "teacherId should not be null")
     @NotBlank(message = "teacherId should not be empty")
     private String teacherId;

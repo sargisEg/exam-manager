@@ -52,8 +52,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
-                                "api/auth/v1/sign-in",
-                                "api/auth/v1/refresh",
+                                "/api/auth/v1/sign-in",
+                                "/api/auth/v1/refresh",
                                 "/error"
                         ).permitAll()
                         .anyRequest().authenticated())
@@ -63,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5000", "https://fd6d33d0-442a-4c89-94bc-7f9b18f816f9-00-1zuevcyhe8a2d.picard.replit.dev"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

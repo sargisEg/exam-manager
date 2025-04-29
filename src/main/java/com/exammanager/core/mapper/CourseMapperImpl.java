@@ -7,6 +7,7 @@ import com.exammanager.core.model.entity.Group;
 import com.exammanager.core.model.entity.Teacher;
 import com.exammanager.core.model.params.CreateCourseParams;
 import com.exammanager.user.mapper.UserMapper;
+import com.exammanager.utils.GroupUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,7 @@ public class CourseMapperImpl implements CourseMapper {
         return new CourseDto(
                 course.getId(),
                 course.getName(),
+                course.getSemester(),
                 groupMapper.map(course.getGroup()),
                 userMapper.map(course.getTeacher())
         );
@@ -38,11 +40,13 @@ public class CourseMapperImpl implements CourseMapper {
 
     @Override
     public Course map(CreateCourseParams params) {
+        final Group group = params.getGroup();
         return new Course(
-               System.currentTimeMillis(),
-               System.currentTimeMillis(),
+                System.currentTimeMillis(),
+                System.currentTimeMillis(),
                 params.getName(),
-                params.getGroup(),
+                GroupUtils.getGroupSemester(group),
+                group,
                 params.getTeacher()
         );
     }

@@ -75,4 +75,23 @@ public class StudentServiceImpl implements StudentService {
         log.trace("Successfully found student with subgroup id - {}, result - {}", subgroupId, students);
         return students;
     }
+
+    @Override
+    public List<Student> findByGroupId(String groupId) {
+        log.trace("Finding students with group id - {}", groupId);
+
+        final List<Student> students = studentRepository.findAllBySubgroupGroupId(groupId);
+
+        log.trace("Successfully found students with group id - {}, result - {}", groupId, students);
+        return students;
+    }
+
+    @Override
+    public void deleteById(String studentId) {
+        log.trace("Removing student with id - {}", studentId);
+
+        studentRepository.deleteById(studentId);
+
+        log.trace("Successfully removed student with id - {}", studentId);
+    }
 }

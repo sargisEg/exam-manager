@@ -4,15 +4,18 @@ import com.exammanager.core.model.entity.Group;
 import com.exammanager.core.model.params.CreateGroupParams;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GroupService {
 
     Group create(CreateGroupParams params);
 
-    Optional<Group> findByIdAndDepartmentId(String groupId, String departmentId);
+    Optional<Group> findById(String groupId);
 
-    Page<Group> findByDepartmentId(String departmentId, int page, int size);
+    Page<Group> findAll(int page, int size);
 
-    void deleteByIdAndDepartmentId(String groupId, String departmentId);
+    List<Group> findAll();
+
+    void deleteById(String groupId);
 }

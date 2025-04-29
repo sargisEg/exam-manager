@@ -18,4 +18,6 @@ public interface TeacherFacade {
     List<UserDto> getAllTeachers(UserInfo userInfo);
 
     TeacherDto getTeacherById(UserInfo userInfo, String teacherId);
+
+    void deleteTeacherById(UserInfo userInfo, String teacherId);
 }

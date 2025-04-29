@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class SubgroupServiceImpl implements SubgroupService {
 
     @Override
     public Subgroup create(CreateSubgroupParams params) {
+        Assert.notNull(params, "params should not be null");
         log.trace("Creating subgroup with params - {}", params);
 
         Subgroup subgroupFromParams = groupMapper.map(params);
@@ -38,6 +40,7 @@ public class SubgroupServiceImpl implements SubgroupService {
 
     @Override
     public Page<Subgroup> findByGroupId(String groupId, int page, int size) {
+        Assert.hasText(groupId, "groupId should not be null");
         log.trace("Finding subgroups page by group id - {}", groupId);
 
         final Page<Subgroup> subgroups = subGroupRepository.findByGroupId(groupId, PageRequest.of(page, size));
@@ -47,12 +50,19 @@ public class SubgroupServiceImpl implements SubgroupService {
     }
 
     @Override
-    public void deleteByIdAndGroupId(String subgroupId, String groupId) {
+    public void deleteById(String subgroupId) {
+        Assert.hasText(subgroupId, "subgroupId should not be null");
+        log.trace("Deleting subgroup with id - {}", subgroupId);
 
+        subGroupRepository.deleteById(subgroupId);
+
+        log.trace("Successfully deleted subgroup with id - {}", subgroupId);
     }
 
     @Override
     public Optional<Subgroup> findByIdAndGroupId(String subgroupId, String groupId) {
+        Assert.hasText(subgroupId, "subgroupId should not be null");
+        Assert.hasText(groupId, "groupId should not be null");
         log.trace("Finding subgroup by id - {} and group id - {}", subgroupId, groupId);
 
         Optional<Subgroup> subgroup = subGroupRepository.findByIdAndGroupId(subgroupId, groupId);
@@ -63,6 +73,7 @@ public class SubgroupServiceImpl implements SubgroupService {
 
     @Override
     public Optional<Subgroup> findById(String subgroupId) {
+        Assert.hasText(subgroupId, "subgroupId should not be null");
         log.trace("Finding subgroup by id - {}", subgroupId);
 
         Optional<Subgroup> subgroup = subGroupRepository.findById(subgroupId);
@@ -73,6 +84,7 @@ public class SubgroupServiceImpl implements SubgroupService {
 
     @Override
     public List<Subgroup> findByGroupId(String groupId) {
+        Assert.hasText(groupId, "groupId should not be null");
         log.trace("Finding subgroups by group id - {}", groupId);
 
         List<Subgroup> subgroups = subGroupRepository.findByGroupId(groupId);

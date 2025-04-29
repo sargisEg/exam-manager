@@ -12,6 +12,7 @@ public class CourseDto {
 
     private String id;
     private String name;
+    private int semester;
     private GroupDto group;
     private UserDto teacher;
 }

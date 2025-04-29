@@ -3,15 +3,23 @@ package com.exammanager.core.facade.core;
 import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.model.dto.request.CreateCourseRequestDto;
 import com.exammanager.core.model.dto.response.CourseDto;
-import org.springframework.data.web.PagedModel;
+
+import java.util.List;
 
 public interface CourseFacade {
 
-    CourseDto createCourse(UserInfo userInfo, String departmentId, String groupId, CreateCourseRequestDto dto);
+    //Admin
+    CourseDto createCourse(UserInfo userInfo, CreateCourseRequestDto dto);
 
-    CourseDto getCourse(UserInfo userInfo, String departmentId, String groupId, String courseId);
+    List<CourseDto> getCoursesByGroupId(UserInfo userInfo, String groupId);
 
-    PagedModel<CourseDto> getCourses(UserInfo userInfo, String departmentId, String groupId, int page, int size);
+    void deleteCourse(UserInfo userInfo, String courseId);
 
-    void deleteCourse(UserInfo userInfo, String departmentId, String groupId, String courseId);
+    List<CourseDto> getCoursesByTeacherId(UserInfo userInfo, String teacherId);
+
+
+    //Teacher
+    List<CourseDto> getCoursesByGroupIdAndTeacherId(UserInfo userInfo, String groupId);
+
+    CourseDto getCourseByIdAndTeacherId(UserInfo userInfo, String courseId);
 }

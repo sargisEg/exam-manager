@@ -15,7 +15,17 @@ public interface CourseService {
 
     Page<Course> findByGroupId(String groupId, int page, int size);
 
+    List<Course> findByGroupId(String groupId);
+
     void deleteByIdAndGroupId(String courseId, String groupId);
 
     List<Course> findByTeacherId(String teacherId);
+
+    Page<Course> findByTeacherId(String teacherId, int page, int size);
+
+    void deleteById(String courseId);
+
+    void deleteByTeacherId(String teacherId);
+
+    Optional<Course> findByIdAndTeacherId(String courseId, String teacherId);
 }

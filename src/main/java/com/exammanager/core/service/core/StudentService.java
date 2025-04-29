@@ -19,4 +19,8 @@ public interface StudentService {
     Optional<Student> findById(String studentId);
 
     List<Student> findBySubgroupId(String subgroupId);
+
+    List<Student> findByGroupId(String groupId);
+
+    void deleteById(String studentId);
 }

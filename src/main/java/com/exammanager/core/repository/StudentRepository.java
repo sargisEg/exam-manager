@@ -8,13 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface StudentRepository extends UserRepository<Student> {
-    Page<Student> findAllBySubgroupGroupDepartmentId(String departmentId, Pageable pageable);
-
     Page<Student> findAllBySubgroupId(String subgroupId, Pageable pageable);
 
     Page<Student> findAllBySubgroupGroupId(String groupId, Pageable pageable);
-
-    List<Student> findAllBySubgroupGroupDepartmentId(String departmentId);
 
     List<Student> findAllBySubgroupId(String subgroupId);
 

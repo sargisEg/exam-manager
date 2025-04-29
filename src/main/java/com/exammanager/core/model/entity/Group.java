@@ -22,15 +22,10 @@ public class Group extends BaseEntity {
     @Column(name = "end_year", nullable = false)
     private Integer endYear;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "department_id", nullable = false, foreignKey = @ForeignKey(name = "FK_GROUPS_DEPARTMENT_ID_DEPARTMENTS_ID"))
-    private Department department;
-
-    public Group(Long createdAt, Long updated, String name, Integer startYear, Integer endYear, Department department) {
+    public Group(Long createdAt, Long updated, String name, Integer startYear, Integer endYear) {
         super(createdAt, updated);
         this.name = name;
         this.startYear = startYear;
         this.endYear = endYear;
-        this.department = department;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -35,27 +36,37 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Optional<Group> findByIdAndDepartmentId(String groupId, String departmentId) {
-        log.trace("Finding group by id - {} and department id - {}", groupId, departmentId);
+    public Optional<Group> findById(String groupId) {
+        log.trace("Finding group by id - {}", groupId);
 
-        final Optional<Group> group = groupRepository.findByIdAndDepartmentId(groupId, departmentId);
+        final Optional<Group> group = groupRepository.findById(groupId);
 
-        log.trace("Successfully found group by id - {} and department id - {}, result - {}", group, departmentId, group);
+        log.trace("Successfully found group by id - {}, result - {}", groupId, group);
         return group;
     }
 
     @Override
-    public Page<Group> findByDepartmentId(String departmentId, int page, int size) {
-        log.trace("Finding groups by department id - {}", departmentId);
+    public Page<Group> findAll(int page, int size) {
+        log.trace("Finding all groups page");
 
-        final Page<Group> groups = groupRepository.findByDepartmentId(departmentId, PageRequest.of(page, size));
+        final Page<Group> groups = groupRepository.findAll(PageRequest.of(page, size));
 
-        log.trace("Successfully found groups by department id - {}, result - {}", departmentId, groups);
+        log.trace("Successfully found all groups page, result - {}", groups);
         return groups;
     }
 
     @Override
-    public void deleteByIdAndDepartmentId(String groupId, String departmentId) {
+    public List<Group> findAll() {
+        log.trace("Finding all groups");
+
+        final List<Group> groups = groupRepository.findAll();
+
+        log.trace("Successfully found all groups, result - {}", groups);
+        return groups;
+    }
+
+    @Override
+    public void deleteById(String groupId) {
 
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ExamFacade {
 
-    ExamDto createExam(UserInfo userInfo, String departmentId, String groupId, CreateExamRequestDto dto);
+    ExamDto createExam(UserInfo userInfo, CreateExamRequestDto dto);
 
     ExamDto updateExam(UserInfo userInfo, String departmentId, String groupId, String examId, UpdateExamRequestDto dto);
 

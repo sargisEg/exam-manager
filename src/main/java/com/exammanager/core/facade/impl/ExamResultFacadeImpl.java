@@ -5,7 +5,6 @@ import com.exammanager.common.security.UserInfo;
 import com.exammanager.core.facade.core.ExamResultFacade;
 import com.exammanager.core.mapper.ExamMapper;
 import com.exammanager.core.model.dto.response.ExamResultDto;
-import com.exammanager.core.service.core.DepartmentService;
 import com.exammanager.core.service.core.ExamResultService;
 import com.exammanager.core.service.core.GroupService;
 import com.exammanager.core.service.core.StudentService;
@@ -24,7 +23,6 @@ import java.util.List;
 public class ExamResultFacadeImpl implements ExamResultFacade {
 
     private final ExamResultService examResultService;
-    private final DepartmentService departmentService;
     private final GroupService groupService;
     private final StudentService studentService;
     private final ExamMapper examMapper;
@@ -39,7 +37,6 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     public PagedModel<ExamResultDto> getAllByStudentId(UserInfo userInfo, String departmentId, String groupId, String studentId, int page, int size) {
         log.trace("Getting all exam result for student - {}, for provided request, user - {}", studentId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
         getStudentById(studentId);
 
@@ -55,7 +52,6 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     public PagedModel<ExamResultDto> getAllBySubgroupId(UserInfo userInfo, String departmentId, String groupId, String subgroupId, int page, int size) {
         log.trace("Getting all exam result for subgroup - {}, for provided request, user - {}", subgroupId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
 
@@ -71,7 +67,6 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     public PagedModel<ExamResultDto> getAllByCourseId(UserInfo userInfo, String departmentId, String groupId, String courseId, int page, int size) {
         log.trace("Getting all exam result for course - {}, for provided request, user - {}", courseId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
 
@@ -87,7 +82,6 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     public List<ExamResultDto> getAllByExamId(UserInfo userInfo, String departmentId, String groupId, String examId) {
         log.trace("Getting all exam result for exam - {}, for provided request, user - {}", examId, userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
 
@@ -103,7 +97,6 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     public PagedModel<ExamResultDto> getMyResults(UserInfo userInfo, String departmentId, String groupId, String courseId, int page, int size) {
         log.trace("Getting all exam result for user - {}, for provided request", userInfo.id());
 
-        getDepartmentById(departmentId);
         getGroupById(groupId, departmentId);
 
         final Page<ExamResultDto> p;
@@ -122,16 +115,8 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
         return responseDto;
     }
 
-    private void getDepartmentById(String departmentId) {
-        departmentService.findById(departmentId).orElseThrow(() ->
-                new NotFoundException(
-                        "Not found department with id - " + departmentId,
-                        "Not found department with id - " + departmentId
-                ));
-    }
-
     private void getGroupById(String groupId, String departmentId) {
-        groupService.findByIdAndDepartmentId(groupId, departmentId).orElseThrow(() ->
+        groupService.findById(groupId).orElseThrow(() ->
                 new NotFoundException(
                         "Not found group with id - " + groupId + "and department id - " + departmentId,
                         "Not found group with id - " + groupId

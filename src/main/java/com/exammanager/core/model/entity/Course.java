@@ -16,6 +16,9 @@ public class Course extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "semester", nullable = false)
+    private Integer semester;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "FK_COURSES_GROUP_ID_GROUPS_ID"))
     private Group group;
@@ -24,9 +27,10 @@ public class Course extends BaseEntity {
     @JoinColumn(name = "teacher_id", nullable = false, foreignKey = @ForeignKey(name = "FK_COURSES_TEACHER_ID_TEACHERS_ID"))
     private Teacher teacher;
 
-    public Course(Long createdAt, Long updatedAt, String name, Group group, Teacher teacher) {
+    public Course(Long createdAt, Long updatedAt, String name, Integer semester, Group group, Teacher teacher) {
         super(createdAt, updatedAt);
         this.name = name;
+        this.semester = semester;
         this.group = group;
         this.teacher = teacher;
     }

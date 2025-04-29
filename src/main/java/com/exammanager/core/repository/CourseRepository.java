@@ -16,5 +16,11 @@ public interface CourseRepository extends JpaRepository<Course, String> {
 
     List<Course> findByTeacherId(String teacherId);
 
+    Page<Course> findByTeacherId(String teacherId, Pageable pageable);
+
     List<Course> findByGroupId(String groupId);
+
+    void deleteByTeacherId(String teacherId);
+
+    Optional<Course> findByIdAndTeacherId(String courseId, String teacherId);
 }

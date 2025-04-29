@@ -11,7 +11,7 @@ public class GroupDto {
 
     private String id;
     private String name;
+    private Integer academicYear;
     private Integer startYear;
     private Integer endYear;
-    private DepartmentDto department;
 }

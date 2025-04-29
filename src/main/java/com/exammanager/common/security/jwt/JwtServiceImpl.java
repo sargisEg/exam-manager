@@ -24,6 +24,7 @@ public class JwtServiceImpl implements JwtService {
                 .claim("id", user.getId())
                 .claim("sessionId", sessionId)
                 .claim("role", user.getRole())
+                .claim("fullName", user.getFullName())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(5, ChronoUnit.MINUTES)))
                 .compact();

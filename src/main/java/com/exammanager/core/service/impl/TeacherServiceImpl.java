@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher create(CreateTeacherParams params) {
+        Assert.notNull(params, "params should not be null");
         log.trace("Creating teacher with params - {}", params);
 
         final Teacher teacherFromParams = teacherMapper.map(params);
@@ -49,6 +51,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Optional<Teacher> findById(String teacherId) {
+        Assert.hasText(teacherId, "teacherId should not be null");
         log.trace("Finding teacher with id - {}", teacherId);
 
         final Optional<Teacher> teachers = teacherRepository.findById(teacherId);
@@ -60,5 +63,15 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> findAll() {
         return teacherRepository.findAllByRoleNot(Role.ADMIN);
+    }
+
+    @Override
+    public void deleteById(String teacherId) {
+        Assert.hasText(teacherId, "teacherId should not be null");
+        log.trace("Deleting teacher with id - {}", teacherId);
+
+        teacherRepository.deleteById(teacherId);
+
+        log.trace("Successfully found deleted with id - {}", teacherId);
     }
 }

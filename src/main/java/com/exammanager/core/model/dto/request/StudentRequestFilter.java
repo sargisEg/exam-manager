@@ -48,12 +48,12 @@ public class StudentRequestFilter {
         BY_DEPARTMENT {
             @Override
             public List<Student> findByFilter(StudentRepository studentRepository) {
-                return studentRepository.findAllBySubgroupGroupDepartmentId(this.getValue());
+                return null;
             }
 
             @Override
             public Page<Student> findByFilter(StudentRepository repository, Pageable pageable) {
-                return repository.findAllBySubgroupGroupDepartmentId(this.getValue(), pageable);
+                return null;
             }
         },
         BY_GROUP {

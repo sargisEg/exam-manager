@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -201,5 +202,30 @@ public class MaterialFacadeImpl implements MaterialFacade {
         });
         materialService.deleteByCourseId(courseId);
         log.debug("Successfully removed materials with course id - {} for provided request", courseId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MaterialDto> getMaterials(UserInfo userInfo) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        log.trace("Finding materials for user - {} for provided request", userInfo.id());
+
+        final Optional<Student> optionalStudent = studentService.findById(userInfo.id());
+        if (optionalStudent.isEmpty()) {
+            throw new IllegalStateException();
+        }
+
+        final Student student = optionalStudent.get();
+        final String groupId = student.getSubgroup().getGroup().getId();
+        final List<MaterialDto> responseDto = courseService.findByGroupId(groupId).stream()
+                .map(Course::getId)
+                .map(materialService::findByCourseId)
+                .flatMap(Collection::stream)
+                .map(materialMapper::map)
+                .toList();
+
+
+        log.trace("Successfully found materials for user - {} for provided request, response - {}", userInfo.id(), responseDto);
+        return responseDto;
     }
 }

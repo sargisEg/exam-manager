@@ -45,4 +45,11 @@ public class GroupController {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(groupFacade.getSubgroupsByTeacherId(userInfo, groupId), HttpStatus.OK);
     }
+
+    @GetMapping("me")
+    @Secured("ROLE_STUDENT")
+    ResponseEntity<GroupDto> getSubgroups() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(groupFacade.getUsersGroup(userInfo), HttpStatus.OK);
+    }
 }

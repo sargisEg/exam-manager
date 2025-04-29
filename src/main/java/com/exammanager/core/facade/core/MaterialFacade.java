@@ -19,4 +19,5 @@ public interface MaterialFacade {
 
     void removeMaterialByCourseId(UserInfo userInfo, String courseId);
 
+    List<MaterialDto> getMaterials(UserInfo userInfo);
 }

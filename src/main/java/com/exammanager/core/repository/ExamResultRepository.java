@@ -17,5 +17,5 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, String> 
 
     List<ExamResult> findByExamId(String examId);
 
-    Page<ExamResult> findByStudentIdAndExamCourseId(String studentId, String courseId, Pageable pageable);
+    List<ExamResult> findByStudentId(String studentId);
 }

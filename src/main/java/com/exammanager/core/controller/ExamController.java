@@ -33,45 +33,61 @@ public class ExamController {
         return new ResponseEntity<>(examFacade.createExam(userInfo, dto), HttpStatus.OK);
     }
 
-    @PutMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
-    @Secured("ROLE_TEACHER")
-    ResponseEntity<ExamDto> updateExam(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @PathVariable("examId") String examId,
-            @RequestBody UpdateExamRequestDto dto) {
+    @GetMapping("courses/{courseId}/exams")
+    @Secured({"ROLE_TEACHER"})
+    ResponseEntity<List<ExamDto>> getAllExamsByCourseId(
+            @PathVariable("courseId") String courseId,
+            @RequestParam("graded") boolean graded
+    ) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.updateExam(userInfo, departmentId, groupId, examId, dto), HttpStatus.OK);
+
+        final List<ExamDto> response = graded ?
+                examFacade.getUpcomingExamsByCourseId(userInfo, courseId) :
+                examFacade.getNotGradedExamsByCourseId(userInfo, courseId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}/grade")
+    @PutMapping("exams/{examId}")
+    @Secured("ROLE_TEACHER")
+    ResponseEntity<ExamDto> updateExam(@PathVariable("examId") String examId, @RequestBody UpdateExamRequestDto dto) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examFacade.updateExam(userInfo, examId, dto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("exams/{examId}")
+    @Secured("ROLE_TEACHER")
+    ResponseEntity<Void> deleteExam(@PathVariable("examId") String examId) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        examFacade.deleteExam(userInfo, examId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("exams")
+    @Secured({"ROLE_TEACHER", "ROLE_STUDENT"})
+    ResponseEntity<List<ExamDto>> getAllExams() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+
+        final List<ExamDto> response = examFacade.getAllUpcomingExams(userInfo);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("exams/{examId}")
+    @Secured("ROLE_TEACHER")
+    ResponseEntity<ExamDto> getExam(@PathVariable("examId") String examId) {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examFacade.getExam(userInfo, examId), HttpStatus.OK);
+    }
+
+    @PutMapping("exams/{examId}/grade")
     ResponseEntity<ExamDto> gradeExam(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
             @PathVariable("examId") String examId,
             @RequestBody GradeExamRequestDto dto) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.gradeExam(userInfo, departmentId, groupId, examId, dto), HttpStatus.OK);
+        return new ResponseEntity<>(examFacade.gradeExam(userInfo, examId, dto), HttpStatus.OK);
     }
 
 
-    @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
-    ResponseEntity<ExamDto> getExam(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @PathVariable("examId") String examId) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.getExam(userInfo, departmentId, groupId, examId), HttpStatus.OK);
-    }
 
-    @GetMapping()
-    ResponseEntity<PagedModel<ExamDto>> getAllExamsInGroup(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @RequestParam("page") int page, @RequestParam("size") int size) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.getExams(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
-    }
 
     @GetMapping("exams/me")
     ResponseEntity<List<ExamDto>> getExamsMe(
@@ -92,17 +108,6 @@ public class ExamController {
         return new ResponseEntity<>(examFacade.getExamsBySubgroupId(userInfo, departmentId, groupId, subgroupId, status, page, size), HttpStatus.OK);
     }
 
-    @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/courses/{courseId}")
-    @Secured({"ROLE_TEACHER", "ROLE_STUDENT"})
-    ResponseEntity<PagedModel<ExamDto>> getAllExamsByCourseId(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @PathVariable("courseId") String courseId,
-            @RequestParam("status") ExamStatus status, @RequestParam("page") int page, @RequestParam("size") int size) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examFacade.getExamsByCourseId(userInfo, departmentId, groupId, courseId, status, page, size), HttpStatus.OK);
-    }
-
     @GetMapping("/departments/{departmentId}/groups/{groupId}/exams/students/{studentId}")
     @Secured("ROLE_ADMIN")
     ResponseEntity<PagedModel<ExamDto>> getAllExamsByStudentId(
@@ -112,16 +117,5 @@ public class ExamController {
             @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(examFacade.getExamsByStudentId(userInfo, departmentId, groupId, studentId, page, size), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/departments/{departmentId}/groups/{groupId}/exams/{examId}")
-    @Secured("ROLE_TEACHER")
-    ResponseEntity<Void> deleteExam(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @PathVariable("examId") String examId) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        examFacade.deleteExam(userInfo, departmentId, groupId, examId);
-        return ResponseEntity.ok().build();
     }
 }

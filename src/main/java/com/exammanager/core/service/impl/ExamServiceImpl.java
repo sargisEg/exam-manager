@@ -56,12 +56,21 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Page<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status, int page, int size) {
+    public List<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status) {
         Assert.hasText(courseId, "courseId should not be null");
         Assert.notNull(status, "status should not be null");
-        log.trace("Finding exam page by course id - {}", courseId);
-        Page<Exam> exams = examRepository.findByCourseIdAndStatus(courseId, status, PageRequest.of(page, size));
-        log.trace("Successfully found exam page by course id - {}, result - {}", courseId, exams);
+        log.trace("Finding exams by course id - {}", courseId);
+        List<Exam> exams = examRepository.findByCourseIdAndStatus(courseId, status);
+        log.trace("Successfully found exams by course id - {}, result - {}", courseId, exams);
+        return exams;
+    }
+
+    @Override
+    public List<Exam> findByCourseIdAndNotGraded(String courseId) {
+        Assert.hasText(courseId, "courseId should not be null");
+        log.trace("Finding not graded exams by course id - {}", courseId);
+        List<Exam> exams = examRepository.findByCourseIdAndStatusAndIsGradedFalse(courseId, ExamStatus.FINISHED);
+        log.trace("Successfully found not graded exams by course id - {}, result - {}", courseId, exams);
         return exams;
     }
 

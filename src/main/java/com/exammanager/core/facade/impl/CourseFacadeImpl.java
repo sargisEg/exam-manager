@@ -88,7 +88,7 @@ public class CourseFacadeImpl implements CourseFacade {
     @Transactional(readOnly = true)
     public List<CourseDto> getCoursesByTeacherId(UserInfo userInfo, String teacherId) {
         Assert.notNull(userInfo, "userInfo should not be null");
-        log.trace("Finding courses by teacher id {} -  for provided request, user - {}", teacherId, userInfo.id());
+        log.trace("Finding courses by teacher id - {} for provided request, user - {}", teacherId, userInfo.id());
 
         final List<CourseDto> responseDto = courseService.findByTeacherId(teacherId).stream()
                 .filter(c -> c.getSemester().equals(GroupUtils.getGroupSemester(c.getGroup())))
@@ -116,6 +116,7 @@ public class CourseFacadeImpl implements CourseFacade {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CourseDto getCourseByIdAndTeacherId(UserInfo userInfo, String courseId) {
         Assert.hasText(courseId, "courseId should not be null");
         Assert.notNull(userInfo, "userInfo should not be null");

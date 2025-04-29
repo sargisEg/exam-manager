@@ -32,4 +32,9 @@ public interface GroupFacade {
     GroupDto getGroupByIdAndTeacherId(UserInfo userInfo, String groupId);
 
     List<SubgroupDto> getSubgroupsByTeacherId(UserInfo userInfo, String groupId);
+
+
+    //User
+
+    GroupDto getUsersGroup(UserInfo userInfo);
 }

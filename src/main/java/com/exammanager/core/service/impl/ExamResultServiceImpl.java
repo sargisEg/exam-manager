@@ -46,19 +46,18 @@ public class ExamResultServiceImpl implements ExamResultService {
     @Override
     public Page<ExamResult> findByStudentId(String studentId, int page, int size) {
         Assert.hasText(studentId, "studentId should not be null");
-        log.trace("Finding exam results by student id - {}", studentId);
+        log.trace("Finding exam results page by student id - {}", studentId);
         Page<ExamResult> examResults = examResultRepository.findByStudentId(studentId, PageRequest.of(page, size));
-        log.trace("Successfully found exam results by student id - {}, result - {}", studentId, examResults);
+        log.trace("Successfully found exam results page by student id - {}, result - {}", studentId, examResults);
         return examResults;
     }
 
     @Override
-    public Page<ExamResult> findByStudentId(String studentId, String courseId, int page, int size) {
+    public List<ExamResult> findByStudentId(String studentId) {
         Assert.hasText(studentId, "studentId should not be null");
-        Assert.hasText(courseId, "courseId should not be null");
-        log.trace("Finding exam results by student id - {} and course id - {}", studentId, courseId);
-        Page<ExamResult> examResults = examResultRepository.findByStudentIdAndExamCourseId(studentId, courseId, PageRequest.of(page, size));
-        log.trace("Successfully found exam results by student id - {} and course id - {}, result - {}", studentId, courseId, examResults);
+        log.trace("Finding exam results by student id - {}", studentId);
+        List<ExamResult> examResults = examResultRepository.findByStudentId(studentId);
+        log.trace("Successfully found exam results by student id - {}, result - {}", studentId, examResults);
         return examResults;
     }
 

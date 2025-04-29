@@ -15,7 +15,10 @@ public interface ExamService {
     Optional<Exam> update(UpdateExamParams params);
 
     Page<Exam> findBySubgroupIdAndStatus(String subgroupId, ExamStatus status, int page, int size);
-    Page<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status, int page, int size);
+
+    List<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status);
+    List<Exam> findByCourseIdAndNotGraded(String courseId);
+
     List<Exam> findByCourseId(String courseId);
     List<Exam> findBySubgroupId(String subgroupId);
     Optional<Exam> findById(String examId);

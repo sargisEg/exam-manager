@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -94,22 +95,13 @@ public class ExamResultFacadeImpl implements ExamResultFacade {
     }
 
     @Override
-    public PagedModel<ExamResultDto> getMyResults(UserInfo userInfo, String departmentId, String groupId, String courseId, int page, int size) {
+    public List<ExamResultDto> getMyResults(UserInfo userInfo) {
+        Assert.notNull(userInfo, "userInfo should not be null");
         log.trace("Getting all exam result for user - {}, for provided request", userInfo.id());
 
-        getGroupById(groupId, departmentId);
-
-        final Page<ExamResultDto> p;
-        if (courseId == null || courseId.isBlank()) {
-            p = examResultService.findByStudentId(userInfo.id(), page, size)
-                    .map(examMapper::map);
-        } else {
-            p = examResultService.findByStudentId(userInfo.id(), courseId, page, size)
-                    .map(examMapper::map);
-        }
-
-
-        final PagedModel<ExamResultDto> responseDto = new PagedModel<>(p);
+        final List<ExamResultDto> responseDto = examResultService.findByStudentId(userInfo.id()).stream()
+                .map(examMapper::map)
+                .toList();
 
         log.trace("Successfully got all exam result for user - {}, for provided request, response - {}", userInfo.id(), responseDto);
         return responseDto;

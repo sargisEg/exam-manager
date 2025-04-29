@@ -11,7 +11,7 @@ public interface ExamResultService {
 
     ExamResult create(Student student, Exam exam, Integer point);
     Page<ExamResult> findByStudentId(String studentId, int page, int size);
-    Page<ExamResult> findByStudentId(String studentId, String courseId, int page, int size);
+    List<ExamResult> findByStudentId(String studentId);
     Page<ExamResult> findBySubgroupId(String subgroupId, int page, int size);
     Page<ExamResult> findByCourseId(String courseId, int page, int size);
     List<ExamResult> findByExamId(String examId);

@@ -10,8 +10,11 @@ import java.util.List;
 
 public interface ExamRepository extends JpaRepository<Exam, String> {
 
-    Page<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status, Pageable pageable);
+    List<Exam> findByCourseIdAndStatus(String courseId, ExamStatus status);
+    List<Exam> findByCourseIdAndStatusAndIsGradedFalse(String courseId, ExamStatus status);
+
     Page<Exam> findBySubgroupIdAndStatus(String subgroupId, ExamStatus status, Pageable pageable);
     List<Exam> findByCourseId(String courseId);
     List<Exam> findBySubgroupId(String subgroupId);
+
 }

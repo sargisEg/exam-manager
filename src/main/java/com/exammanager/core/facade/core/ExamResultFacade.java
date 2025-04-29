@@ -18,5 +18,5 @@ public interface ExamResultFacade {
 
     List<ExamResultDto> getAllByExamId(UserInfo userInfo, String departmentId, String groupId, String examId);
 
-    PagedModel<ExamResultDto> getMyResults(UserInfo userInfo, String departmentId, String groupId, String courseId, int page, int size);
+    List<ExamResultDto> getMyResults(UserInfo userInfo);
 }

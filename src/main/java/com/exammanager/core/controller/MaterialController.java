@@ -20,14 +20,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/core/v1/courses/{courseId}/materials")
-@Secured("ROLE_TEACHER")
+@RequestMapping("api/core/v1")
 @SuppressWarnings("unused")
 public class MaterialController {
 
     private final MaterialFacade materialFacade;
 
-    @PostMapping
+    @PostMapping("courses/{courseId}/materials")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<Void> uploadMaterial(
             @PathVariable("courseId") String courseId,
             @RequestParam("file") MultipartFile file) {
@@ -36,7 +36,8 @@ public class MaterialController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{materialId}")
+    @GetMapping("courses/{courseId}/materials/{materialId}")
+    @Secured({"ROLE_TEACHER", "ROLE_STUDENT"})
     ResponseEntity<Resource> downloadMaterial(@PathVariable("courseId") String courseId, @PathVariable("materialId") String materialId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         final ResourceWithFilename resourceWithFilename = materialFacade.downloadMaterial(userInfo, courseId, materialId);
@@ -46,17 +47,26 @@ public class MaterialController {
                 .body(resourceWithFilename.resource());
     }
 
-    @GetMapping()
+    @GetMapping("courses/{courseId}/materials")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<List<MaterialDto>> getMaterials(@PathVariable("courseId") String courseId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         final List<MaterialDto> materials = materialFacade.getMaterials(userInfo, courseId);
         return ResponseEntity.ok().body(materials);
     }
 
-    @DeleteMapping("{materialId}")
+    @DeleteMapping("courses/{courseId}/materials/{materialId}")
+    @Secured("ROLE_TEACHER")
     ResponseEntity<List<MaterialDto>> deleteMaterial(@PathVariable("courseId") String courseId, @PathVariable("materialId") String materialId) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         materialFacade.removeMaterialById(userInfo, courseId, materialId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("materials/me")
+    @Secured("ROLE_STUDENT")
+    ResponseEntity<List<MaterialDto>> getMaterialsForStudent() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return ResponseEntity.ok().body(materialFacade.getMaterials(userInfo));
     }
 }

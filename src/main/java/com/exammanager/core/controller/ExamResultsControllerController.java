@@ -15,11 +15,21 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/core/v1/departments/{departmentId}/groups/{groupId}/exam-results")
+@RequestMapping("api/core/v1/exam-results")
 @SuppressWarnings("unused")
 public class ExamResultsControllerController {
 
     private final ExamResultFacade examResultFacade;
+
+
+    @GetMapping("me")
+    @Secured("ROLE_STUDENT")
+    ResponseEntity<List<ExamResultDto>> getMyExamResults() {
+        final UserInfo userInfo = UserInfoProvider.getUserInfo();
+        return new ResponseEntity<>(examResultFacade.getMyResults(userInfo), HttpStatus.OK);
+    }
+
+
 
     @GetMapping("page")
     ResponseEntity<PagedModel<ExamResultDto>> getAllExamResults(
@@ -28,16 +38,6 @@ public class ExamResultsControllerController {
             @RequestParam("page") int page, @RequestParam("size") int size) {
         final UserInfo userInfo = UserInfoProvider.getUserInfo();
         return new ResponseEntity<>(examResultFacade.getAllByGroupId(userInfo, departmentId, groupId, page, size), HttpStatus.OK);
-    }
-
-    @GetMapping("me")
-    ResponseEntity<PagedModel<ExamResultDto>> getMyExamResults(
-            @PathVariable("departmentId") String departmentId,
-            @PathVariable("groupId") String groupId,
-            @RequestParam("courseId") String courseId,
-            @RequestParam("page") int page, @RequestParam("size") int size) {
-        final UserInfo userInfo = UserInfoProvider.getUserInfo();
-        return new ResponseEntity<>(examResultFacade.getMyResults(userInfo, departmentId, groupId, courseId, page, size), HttpStatus.OK);
     }
 
     @GetMapping("subgroups/{subgroupId}")

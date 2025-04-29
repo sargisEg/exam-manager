@@ -14,21 +14,28 @@ public interface ExamFacade {
 
     ExamDto createExam(UserInfo userInfo, CreateExamRequestDto dto);
 
-    ExamDto updateExam(UserInfo userInfo, String departmentId, String groupId, String examId, UpdateExamRequestDto dto);
+    List<ExamDto> getUpcomingExamsByCourseId(UserInfo userInfo, String courseId);
 
-    ExamDto getExam(UserInfo userInfo, String departmentId, String groupId, String examId);
+    List<ExamDto> getNotGradedExamsByCourseId(UserInfo userInfo, String courseId);
 
-    PagedModel<ExamDto> getExams(UserInfo userInfo, String departmentId, String groupId, int page, int size);
+    ExamDto updateExam(UserInfo userInfo, String examId, UpdateExamRequestDto dto);
 
-    void deleteExam(UserInfo userInfo, String departmentId, String groupId, String examId);
+    void deleteExam(UserInfo userInfo, String examId);
+
+    List<ExamDto> getAllUpcomingExams(UserInfo userInfo);
+
+    ExamDto getExam(UserInfo userInfo, String examId);
+
+    ExamDto gradeExam(UserInfo userInfo, String examId, GradeExamRequestDto dto);
+
+
+
+    List<ExamDto> getExams(UserInfo userInfo, String groupId);
 
     PagedModel<ExamDto> getExamsByStudentId(UserInfo userInfo, String departmentId, String groupId, String studentId, int page, int size);
 
     PagedModel<ExamDto> getExamsBySubgroupId(UserInfo userInfo, String departmentId, String groupId, String subgroupId, ExamStatus status, int page, int size);
 
-    PagedModel<ExamDto> getExamsByCourseId(UserInfo userInfo, String departmentId, String groupId, String courseId, ExamStatus status, int page, int size);
-
     List<ExamDto> getExamsMe(UserInfo userInfo, ExamStatus status);
 
-    ExamDto gradeExam(UserInfo userInfo, String departmentId, String groupId, String examId, GradeExamRequestDto dto);
 }

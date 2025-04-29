@@ -9,10 +9,12 @@ import com.exammanager.core.model.dto.response.GroupDto;
 import com.exammanager.core.model.dto.response.SubgroupDto;
 import com.exammanager.core.model.entity.Course;
 import com.exammanager.core.model.entity.Group;
+import com.exammanager.core.model.entity.Student;
 import com.exammanager.core.model.entity.Subgroup;
 import com.exammanager.core.model.params.CreateSubgroupParams;
 import com.exammanager.core.service.core.CourseService;
 import com.exammanager.core.service.core.GroupService;
+import com.exammanager.core.service.core.StudentService;
 import com.exammanager.core.service.core.SubgroupService;
 import com.exammanager.utils.GroupUtils;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class GroupFacadeImpl implements GroupFacade {
     private final GroupService groupService;
     private final SubgroupService subgroupService;
     private final CourseService courseService;
+    private final StudentService studentService;
 
     private final GroupMapper groupMapper;
 
@@ -197,6 +200,20 @@ public class GroupFacadeImpl implements GroupFacade {
                 .toList();
 
         log.debug("Successfully found all subgroups in group - {} for teacher with id - {} for provided request, response - {}", groupId, userInfo.id(), responseDto);
+        return responseDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GroupDto getUsersGroup(UserInfo userInfo) {
+        Assert.notNull(userInfo, "userInfo should not be null");
+        log.debug("Getting group for user - {} for provided request", userInfo);
+
+        final Student student = studentService.findById(userInfo.id()).orElseThrow(IllegalStateException::new);
+
+        final GroupDto responseDto = groupMapper.map(student.getSubgroup().getGroup());
+
+        log.debug("Successfully got group for user - {}, response - {}", userInfo, responseDto);
         return responseDto;
     }
 

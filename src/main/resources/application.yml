@@ -22,3 +22,11 @@ logging:
   level:
 #    org.springframework.security: TRACE
     com.exammanager: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always

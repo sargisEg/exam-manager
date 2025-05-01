@@ -54,7 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/v1/sign-in",
                                 "/api/auth/v1/refresh",
-                                "/error"
+                                "/error",
+                                "/actuator/prometheus"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .build();

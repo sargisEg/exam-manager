@@ -1,0 +1,32 @@
+services:
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      -  9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-oss
+    ports:
+      - 3000:3000
+  back:
+    container_name: back
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8088:8088
+  front:
+    container_name: front
+    image: front
+    ports:
+      - 5000:80
